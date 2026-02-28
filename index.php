@@ -23,7 +23,7 @@ if (!isset($_SESSION['booking'])) {
     'phone' => '',
     'department' => '',
   ];
-}
+}  
 
 $booking = &$_SESSION['booking'];
 $error = '';
