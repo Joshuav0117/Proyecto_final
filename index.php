@@ -6,6 +6,7 @@ session_start();
  * Step 1: Selección de salón + fecha + hora + cantidad + notas
  * Step 2: Datos personales
  * Step 3: Revisión y confirmación
+ * Link para correr en el browser: http://localhost/proyecto_final/
  */
 
 $step = isset($_GET['step']) ? (int)$_GET['step'] : 1;
