@@ -132,12 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="overlay">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
           <div class="brand">
-            <div class="logo" aria-hidden="true">
-              <svg viewBox="0 0 24 24" role="img" aria-label="logo">
-                <path d="M12 2 1 21h22L12 2zm0 4.3 7.3 13.4H4.7L12 6.3z"/>
-              </svg>
-            </div>
-            <div class="name">Universidad</div>
+              <div class="logo">
+                <img src="assets/img/UPRA.png" alt="Logo UPRA">
+              </div>
           </div>
 
           <div class="social" aria-label="social">
