@@ -3,7 +3,7 @@ session_start();
 
 /**
  * Reservación de salones (PHP + HTML + CSS)
- * Step 1: Selección de salón + fecha + hora + cantidad + notas
+ * Step 1: Selección de salón + fechas (inicio/fin) + horas (inicio/fin) + cantidad + notas
  * Step 2: Datos personales
  * Step 3: Revisión y confirmación
  * Link para correr en el browser: http://localhost/proyecto_final/
@@ -15,8 +15,12 @@ if ($step < 1 || $step > 3) $step = 1;
 if (!isset($_SESSION['booking'])) {
   $_SESSION['booking'] = [
     'room' => 'Salon A',
-    'date' => '',
-    'time' => '',
+
+    'date_start' => '',
+    'date_end'   => '',
+    'time_start' => '',
+    'time_end'   => '',
+
     'students' => 1,
     'notes' => '',
     'full_name' => '',
@@ -24,7 +28,7 @@ if (!isset($_SESSION['booking'])) {
     'phone' => '',
     'department' => '',
   ];
-}  
+}
 
 $booking = &$_SESSION['booking'];
 $error = '';
@@ -38,7 +42,6 @@ function is_valid_date($d){
 }
 
 function is_valid_time($t){
-  // Formato HH:MM (24h)
   return (bool)preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $t);
 }
 
@@ -55,18 +58,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $action = $_POST['action'] ?? 'next';
 
   if ($step === 1) {
-    $booking['room'] = trim($_POST['room'] ?? 'Salon A');
-    $booking['date'] = trim($_POST['date'] ?? '');
-    $booking['time'] = trim($_POST['time'] ?? '');
-    $booking['students'] = max(1, min(150, (int)($_POST['students'] ?? 1)));
-    $booking['notes'] = trim($_POST['notes'] ?? '');
+    $booking['room']       = trim($_POST['room'] ?? 'Salon A');
+    $booking['date_start'] = trim($_POST['date_start'] ?? '');
+    $booking['date_end']   = trim($_POST['date_end'] ?? '');
+    $booking['time_start'] = trim($_POST['time_start'] ?? '');
+    $booking['time_end']   = trim($_POST['time_end'] ?? '');
+    $booking['students']   = max(1, min(150, (int)($_POST['students'] ?? 1)));
+    $booking['notes']      = trim($_POST['notes'] ?? '');
 
     if (!in_array($booking['room'], $salones, true)) {
       $error = 'Selecciona un salón válido.';
-    } elseif (!is_valid_date($booking['date'])) {
-      $error = 'Selecciona una fecha válida.';
-    } elseif (!is_valid_time($booking['time'])) {
-      $error = 'Selecciona una hora válida (HH:MM).';
+    } elseif (!is_valid_date($booking['date_start']) || !is_valid_date($booking['date_end'])) {
+      $error = 'Selecciona fechas válidas.';
+    } elseif (!is_valid_time($booking['time_start']) || !is_valid_time($booking['time_end'])) {
+      $error = 'Selecciona horas válidas (HH:MM).';
+    } else {
+      $startDT = DateTime::createFromFormat('Y-m-d H:i', $booking['date_start'].' '.$booking['time_start']);
+      $endDT   = DateTime::createFromFormat('Y-m-d H:i', $booking['date_end'].' '.$booking['time_end']);
+
+      if (!$startDT || !$endDT) {
+        $error = 'Hubo un problema con la fecha/hora. Intenta de nuevo.';
+      } elseif ($endDT <= $startDT) {
+        $error = 'La fecha/hora de fin debe ser después de la fecha/hora de inicio.';
+      }
     }
 
     if (!$error) {
@@ -76,9 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if ($step === 2) {
-    $booking['full_name'] = trim($_POST['full_name'] ?? '');
-    $booking['email'] = trim($_POST['email'] ?? '');
-    $booking['phone'] = trim($_POST['phone'] ?? '');
+    $booking['full_name']  = trim($_POST['full_name'] ?? '');
+    $booking['email']      = trim($_POST['email'] ?? '');
+    $booking['phone']      = trim($_POST['phone'] ?? '');
     $booking['department'] = trim($_POST['department'] ?? '');
 
     if ($booking['full_name'] === '' || $booking['email'] === '') {
@@ -95,14 +109,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if ($step === 3) {
     if ($action === 'confirm') {
-      // Demo: aquí guardarías en BD (MySQL) o enviarías email.
       $success = '¡Reserva confirmada! (Demo) Puedes volver a empezar cuando quieras.';
 
-      // Reset demo
       $_SESSION['booking'] = [
         'room' => 'Salon A',
-        'date' => '',
-        'time' => '',
+        'date_start' => '',
+        'date_end'   => '',
+        'time_start' => '',
+        'time_end'   => '',
         'students' => 1,
         'notes' => '',
         'full_name' => '',
@@ -146,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="hero">
           <div class="tag">Reservación de Salones</div>
-          <p>Selecciona el salón, fecha y hora para tu actividad.</p>
+          <p>Selecciona el salón, fechas y horas para tu actividad.</p>
         </div>
       </div>
     </section>
@@ -188,26 +202,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       </option>
                     <?php endforeach; ?>
                   </select>
+                  <!-- si quieres también que este icono haga focus al select, me dices -->
                   <div class="icon" aria-hidden="true">🏫</div>
                 </div>
               </div>
 
-              <!-- 2) FECHA Y HORA -->
+              <!-- 2) FECHAS (INICIO / FIN) -->
               <div class="row two">
                 <div class="field">
-                  <label>Fecha</label>
-                  <input type="date" name="date" value="<?php echo h($booking['date']); ?>" required />
-                  <div class="icon" aria-hidden="true">📅</div>
+                  <label>Fecha (inicio)</label>
+                  <input id="date_start" type="date" name="date_start" value="<?php echo h($booking['date_start']); ?>" required />
+                  <button type="button" class="icon-btn" data-open="date_start" aria-label="Abrir calendario (inicio)">📅</button>
                 </div>
 
                 <div class="field">
-                  <label>Hora</label>
-                  <input type="time" name="time" value="<?php echo h($booking['time']); ?>" required />
-                  <div class="icon" aria-hidden="true">⏰</div>
+                  <label>Fecha (fin)</label>
+                  <input id="date_end" type="date" name="date_end" value="<?php echo h($booking['date_end']); ?>" required />
+                  <button type="button" class="icon-btn" data-open="date_end" aria-label="Abrir calendario (fin)">📅</button>
                 </div>
               </div>
 
-              <!-- 3) ESTUDIANTES -->
+              <!-- 3) HORAS (INICIO / FIN) DEBAJO -->
+              <div class="row two">
+                <div class="field">
+                  <label>Hora (inicio)</label>
+                  <input id="time_start" type="time" name="time_start" value="<?php echo h($booking['time_start']); ?>" required />
+                  <button type="button" class="icon-btn" data-open="time_start" aria-label="Abrir reloj (inicio)">⏰</button>
+                </div>
+
+                <div class="field">
+                  <label>Hora (fin)</label>
+                  <input id="time_end" type="time" name="time_end" value="<?php echo h($booking['time_end']); ?>" required />
+                  <button type="button" class="icon-btn" data-open="time_end" aria-label="Abrir reloj (fin)">⏰</button>
+                </div>
+              </div>
+
+              <!-- 4) ESTUDIANTES -->
               <div class="row">
                 <div class="field">
                   <label>Cantidad de estudiantes</label>
@@ -219,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
               </div>
 
-              <!-- 4) NOTAS -->
+              <!-- 5) NOTAS -->
               <div class="row">
                 <div class="field">
                   <label>Notas</label>
@@ -281,23 +311,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" value="<?php echo h($booking['room']); ?>" readonly />
               </div>
               <div class="field">
-                <label>Fecha y hora</label>
-                <input type="text" value="<?php echo h($booking['date']); ?> — <?php echo h($booking['time']); ?>" readonly />
+                <label>Fechas</label>
+                <input type="text" value="<?php echo h($booking['date_start']); ?> → <?php echo h($booking['date_end']); ?>" readonly />
               </div>
             </div>
 
             <div class="row two">
               <div class="field">
+                <label>Horas</label>
+                <input type="text" value="<?php echo h($booking['time_start']); ?> → <?php echo h($booking['time_end']); ?>" readonly />
+              </div>
+              <div class="field">
                 <label>Estudiantes</label>
                 <input type="text" value="<?php echo h($booking['students']); ?>" readonly />
               </div>
+            </div>
+
+            <div class="row two">
               <div class="field">
                 <label>Departamento/Curso</label>
                 <input type="text" value="<?php echo h($booking['department']); ?>" readonly />
               </div>
-            </div>
-
-            <div class="row">
               <div class="field">
                 <label>Nombre</label>
                 <input type="text" value="<?php echo h($booking['full_name']); ?>" readonly />
@@ -365,6 +399,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           const min = parseInt(input.min || "0", 10);
           const max = parseInt(input.max || "10", 10);
           input.value = clamp((parseInt(input.value || "0", 10) - 1), min, max);
+        });
+      });
+    })();
+
+    // ✅ Abrir calendario / reloj al hacer click en los iconos
+    (function(){
+      document.querySelectorAll('[data-open]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = btn.getAttribute('data-open');
+          const input = document.getElementById(id);
+          if (!input) return;
+
+          if (typeof input.showPicker === 'function') {
+            input.showPicker(); // Chrome/Edge modernos
+          } else {
+            input.focus();      // Fallback
+            input.click();
+          }
         });
       });
     })();
