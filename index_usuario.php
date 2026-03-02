@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+/**
+ * Reservación de salones (PHP + HTML + CSS)
+ * Step 1: Selección de salón + fechas (inicio/fin) + horas (inicio/fin) + cantidad + notas
+ * Step 2: Datos personales
+ * Step 3: Revisión y confirmación
+ * Link para correr en el browser: http://localhost/proyecto_final/
+ */
+
 require_once __DIR__ . '/Controller/BookingController.php';
 
 $controller = new BookingController();
