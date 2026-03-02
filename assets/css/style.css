@@ -29,7 +29,7 @@ body{
 /* LEFT */
 .left{
   position: relative;
-  background: url("../img/hero.jpg") center/cover no-repeat;
+  background: url("../img/fondo_upra.JPG") center/cover no-repeat;
 }
 .left::after{
   content:"";
@@ -57,8 +57,8 @@ body{
   display:grid; place-items:center;
 }
 .brand .logo img{
-  width: 150%;
-  height: 150%;
+  width: 180%;
+  height: 180%;
   object-fit: contain;
   margin-bottom: 380px;
 }
