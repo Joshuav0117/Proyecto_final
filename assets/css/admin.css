@@ -1,0 +1,199 @@
+/* ADMIN DASHBOARD */
+
+.admin-page{
+  margin-top: 10px;
+}
+
+.admin-title{
+  text-align: center;
+  font-size: 28px;
+  margin: 0 0 28px 0;
+}
+
+.admin-button-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.admin-btn-box{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 90px;
+  padding: 22px 24px;
+  background: #000000;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  font-size: 22px;
+  font-weight: 700;
+  transition: .2s ease;
+}
+
+.admin-btn-box:hover{
+  background: #2ea6bc;
+  transform: translateY(-2px);
+}
+
+.admin-btn-icon{
+  font-size: 30px;
+  line-height: 1;
+  min-width: 34px;
+  text-align: center;
+}
+
+@media (max-width: 700px){
+  .admin-button-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+.pending-title{
+  text-align:center;
+  font-size:26px;
+  margin-bottom:20px;
+  width:100%;
+}
+
+.pending-empty{
+  text-align:center;
+  font-size:18px;
+  color:#777;
+  margin-top:8px;
+}
+
+
+/* EDIT CLASSROOMS */
+
+.classroom-page{
+  margin-top: 10px;
+}
+
+.classroom-title{
+  text-align: center;
+  font-size: 32px;
+  margin: 0 0 10px 0;
+  font-weight: 800;
+}
+
+.classroom-subtitle{
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 28px;
+}
+
+.classroom-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.classroom-box{
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+.classroom-name{
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 14px;
+}
+
+.classroom-info p{
+  margin: 8px 0;
+  font-size: 16px;
+  color: #444;
+}
+
+.classroom-actions{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.classroom-status-text{
+  font-size: 16px;
+  color: #222;
+}
+
+/* Botón tipo switch */
+.status-switch{
+  position: relative;
+  width: 58px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .25s ease;
+  padding: 0;
+}
+
+.status-switch-circle{
+  position: absolute;
+  top: 3px;
+  width: 22px;
+  height: 22px;
+  background: #f2f2f2;
+  border-radius: 50%;
+  transition: all .25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,.18);
+}
+
+.status-switch.is-active{
+  background: #7edc7a;
+}
+
+.status-switch.is-active .status-switch-circle{
+  left: 33px;
+}
+
+.status-switch.is-inactive{
+  background: #d9d9d9;
+}
+
+.status-switch.is-inactive .status-switch-circle{
+  left: 3px;
+}
+
+.classroom-back-wrap{
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.classroom-back-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  padding: 14px 22px;
+  background: #000000;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: .2s ease;
+}
+
+.classroom-back-btn:hover{
+  background: #2ea6bc;
+}
+
+@media (max-width: 900px){
+  .classroom-grid{
+    grid-template-columns: 1fr;
+  }
+}
