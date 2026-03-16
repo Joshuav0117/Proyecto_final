@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../Model/step1Model.php';
+
 class BookingController
 {
   public function handle()
@@ -19,14 +21,8 @@ class BookingController
       return (bool)preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $t);
     };
 
-    $salones = [
-      'Salon A',
-      'Salon B',
-      'Salon C',
-      'Laboratorio 101',
-      'Laboratorio 202',
-      'Salon de Conferencias'
-    ];
+    $model = new RoomModel();
+    $salones = $model->getSalones();
 
     // Session init
     if (!isset($_SESSION['booking'])) {
