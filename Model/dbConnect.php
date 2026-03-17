@@ -2,7 +2,7 @@
 $host = "mysql-1d48bef3-upr-8f96.c.aivencloud.com";
 $db   = "defaultdb";
 $user = "avnadmin";
-$pass = "Eliminada";
+$pass = "eliminada";
 $port = 25148;
 
 try {

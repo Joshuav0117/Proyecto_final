@@ -8,11 +8,7 @@ class RoomModel {
 
         global $pdo;
 
-<<<<<<< HEAD
         $sql = "SELECT s_id FROM Salon Where s_estado = 1";
-=======
-        $sql = "SELECT s_id FROM Salon";
->>>>>>> 2e188273455ab3122a18738cfce64df36242d98c
         $stmt = $pdo->query($sql);
 
         $salones = [];
@@ -23,7 +19,6 @@ class RoomModel {
 
         return $salones;
     }
-<<<<<<< HEAD
 
     public function getDisponibilidadByRoom($room) {
         global $pdo;
@@ -124,6 +119,4 @@ class RoomModel {
 
         return $indices;
     }
-=======
->>>>>>> 2e188273455ab3122a18738cfce64df36242d98c
 }
