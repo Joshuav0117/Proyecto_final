@@ -21,120 +21,14 @@ class BookingController
       return (bool)preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $t);
     };
 
-    $model = new RoomModel();
-    $salones = $model->getSalones();
-
-    // ---------- NUEVO: Lógica AJAX ----------
-    if (isset($_GET['ajax']) && $_GET['ajax'] === 'disponibilidad') { 
-    $room = $_GET['room'] ?? '';
-
-    if (!$room) {
-        echo '<p>Selecciona un salón primero.</p>';
-        exit;
-    }
-
-    $disponibilidad = $model->getDisponibilidadByRoom($room);
-
-    if (!$disponibilidad) {
-        echo '<p>No hay disponibilidad para este salón.</p>';
-        exit;
-    }
-
-   
-    // LÓGICA PARA RELLENAR INTERVALOS 
-    
-
-    $columnasHoras = [
-        'd_7_00','d_7_30','d_8_00','d_8_30',
-        'd_9_00','d_9_30','d_10_00','d_10_30',
-        'd_11_00','d_11_30','d_12_00','d_12_30',
-        'd_13_00','d_13_30','d_14_00','d_14_30',
-        'd_15_00','d_15_30','d_16_00','d_16_30',
-        'd_17_00','d_17_30','d_18_00','d_18_30',
-        'd_19_00','d_19_30','d_20_00','d_20_30',
-        'd_21_00','d_21_30','d_22_00'
+    $salones = [
+      'Salon A',
+      'Salon B',
+      'Salon C',
+      'Laboratorio 101',
+      'Laboratorio 202',
+      'Salon de Conferencias'
     ];
-
-    foreach ($disponibilidad as &$u) {
-
-        $inicio = -1;
-
-        foreach ($columnasHoras as $i => $col) {
-
-            if ($u[$col] == 1 && $inicio == -1) {
-                $inicio = $i;
-            }
-
-            if ($u[$col] == 1 && $inicio != -1 && $i != $inicio) {
-                for ($j = $inicio; $j <= $i; $j++) {
-                    $u[$columnasHoras[$j]] = 1;
-                }
-                $inicio = $i;
-            }
-        }
-    }
-    unset($u);
-   
-    // Generar la tabla 
-
-    ?>
-
-    <table class="tabla-Disponibilidad">
-
-        <!-- ENCABEZADO -->
-        <tr>
-            <th>Hora</th>
-
-            <?php foreach ($disponibilidad as $u): ?>
-                <?php
-                switch ($u['d_dia']) {
-                    case 1: $dia = "Lunes"; break;
-                    case 2: $dia = "Martes"; break;
-                    case 3: $dia = "Miércoles"; break;
-                    case 4: $dia = "Jueves"; break;
-                    case 5: $dia = "Viernes"; break;
-                    case 6: $dia = "Sábado"; break;
-                    case 7: $dia = "Domingo"; break;
-                    default: $dia = "Desconocido";
-                }
-                ?>
-                <th><?= $dia ?></th>
-            <?php endforeach; ?>
-        </tr>
-
-        <?php
-        $horas = [
-            '7:00' => 'd_7_00','7:30' => 'd_7_30','8:00' => 'd_8_00','8:30' => 'd_8_30',
-            '9:00' => 'd_9_00','9:30' => 'd_9_30','10:00' => 'd_10_00','10:30' => 'd_10_30',
-            '11:00' => 'd_11_00','11:30' => 'd_11_30','12:00' => 'd_12_00','12:30' => 'd_12_30',
-            '13:00' => 'd_13_00','13:30' => 'd_13_30','14:00' => 'd_14_00','14:30' => 'd_14_30',
-            '15:00' => 'd_15_00','15:30' => 'd_15_30','16:00' => 'd_16_00','16:30' => 'd_16_30',
-            '17:00' => 'd_17_00','17:30' => 'd_17_30','18:00' => 'd_18_00','18:30' => 'd_18_30',
-            '19:00' => 'd_19_00','19:30' => 'd_19_30','20:00' => 'd_20_00','20:30' => 'd_20_30',
-            '21:00' => 'd_21_00','21:30' => 'd_21_30','22:00' => 'd_22_00'
-        ];
-        ?>
-
-        <!-- FILAS POR HORA -->
-        <?php foreach ($horas as $horaTexto => $columna): ?>
-            <tr>
-                <td><?= $horaTexto ?></td>
-
-                <?php foreach ($disponibilidad as $u): ?>
-                    <td class="<?= $u[$columna] == 1 ? 'ocupado' : '' ?>">
-                        <!-- <?= $u[$columna] ?> -->
-                    </td>
-                <?php endforeach; ?>
-
-            </tr>
-        <?php endforeach; ?>
-
-    </table>
-
-    <?php
-    exit;
-}
-    // ---------- FIN AJAX ----------
 
     // Session init
     if (!isset($_SESSION['booking'])) {
