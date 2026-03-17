@@ -7,8 +7,16 @@
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
+  <?php if (isset($_SESSION['success'])): ?>
+    <div class="alert success">
+      <?= $_SESSION['success']; ?>
+    </div>
+    <?php unset($_SESSION['success']); ?>
+  <?php endif; ?>
+
+  
   <div class="split">
-    <section class="left" aria-label="Imagen">
+    <section class="left" aria-label="Imagen" id="fondo_upra">
       <div class="overlay">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
           <div class="brand">
@@ -22,6 +30,9 @@
             <a href="#" title="Instagram">i</a>
           </div>
         </div>
+
+        <!-- CONTENEDOR DE LA TABLA -->
+        <div id="tablaDisponibilidad" class="tabla-disponibilidad"></div>
 
         <div class="hero">
           <div class="tag">Reservación de Salones</div>

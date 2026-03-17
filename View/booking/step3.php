@@ -12,8 +12,8 @@
     <input type="text" value="<?php echo $h($booking['room']); ?>" readonly />
   </div>
   <div class="field">
-    <label>Fechas</label>
-    <input type="text" value="<?php echo $h($booking['date_start']); ?> → <?php echo $h($booking['date_end']); ?>" readonly />
+    <label>Fecha</label>
+    <input type="text" value="<?php echo $h($booking['date_start']); ?>" readonly />
   </div>
 </div>
 
@@ -22,15 +22,15 @@
     <label>Horas</label>
     <input type="text" value="<?php echo $h($booking['time_start']); ?> → <?php echo $h($booking['time_end']); ?>" readonly />
   </div>
-  <div class="field">
+  <!-- <div class="field">
     <label>Estudiantes</label>
     <input type="text" value="<?php echo $h($booking['students']); ?>" readonly />
-  </div>
+  </div> -->
 </div>
 
 <div class="row two">
   <div class="field">
-    <label>Departamento/Curso</label>
+    <label>Departamento/Organización</label>
     <input type="text" value="<?php echo $h($booking['department']); ?>" readonly />
   </div>
   <div class="field">

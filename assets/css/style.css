@@ -33,6 +33,10 @@ body{
 /* LEFT */
 .left{
   position: relative;
+  /* background: url("../img/fondo_upra.JPG") center/cover no-repeat; */
+}
+
+#fondo_upra {
   background: url("../img/fondo_upra.JPG") center/cover no-repeat;
 }
 
@@ -485,4 +489,57 @@ textarea:focus{
   font-size:26px;
   margin-bottom:20px;
   width:100%;
+}
+/* CONTENEDOR DE LA TABLA */
+.tabla-disponibilidad{
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 100%;
+  /* background-color: white; */
+  overflow-x: auto;
+}
+
+/* TABLA */
+.tabla-disponibilidad table{
+  border-collapse: collapse;
+  font-size: 11px;
+  width: 100%;
+  background-color: white;
+}
+
+/* ENCABEZADOS */
+.tabla-disponibilidad th{
+  background: #f2f4f7;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* CELDAS */
+.tabla-disponibilidad td{
+  padding: 3px 5px;
+  border: 1px solid #ddd;
+  /* border-radius: 50px; */
+  text-align: center;
+}
+
+/* HORAS OCUPADAS */
+.tabla-disponibilidad td.ocupado{
+  background-color: #2d6cdf;
+  color: white;
+  font-weight: bold;
+}
+
+/* CSS para la alerta de reservacion realizada */
+.alert.success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin: 15px;
+  border: 1px solid #c3e6cb;
+  font-weight: 500;
+  text-align: center;
 }

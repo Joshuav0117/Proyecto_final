@@ -11,18 +11,17 @@
   <div class="row two">
     <div class="field">
       <label>Email</label>
-      <input type="email" name="email" value="<?php echo $h($booking['email']); ?>" placeholder="correo@ejemplo.com" required />
+      <input type="email" name="email" value="<?php echo $h($booking['email']); ?>" placeholder="correo@ejemplo.com" maxlength="30" required />
     </div>
     <div class="field">
       <label>Teléfono (opcional)</label>
-      <input type="tel" name="phone" value="<?php echo $h($booking['phone']); ?>" placeholder="787-000-0000" />
+      <input type="tel" name="phone" value="<?php echo $h($booking['phone']); ?>" placeholder="787-000-0000" maxlength="10" />
     </div>
   </div>
-
   <div class="row">
     <div class="field">
-      <label>Departamento / Curso (opcional)</label>
-      <input type="text" name="department" value="<?php echo $h($booking['department']); ?>" placeholder="Ej: COMP 3001 / Enfermería" />
+      <label>Departamento / Organización (opcional)</label>
+      <input type="text" name="department" value="<?php echo $h($booking['department']); ?>" placeholder="Ej: COMP 3001 / Enfermería" maxlength="30" />
     </div>
   </div>
 
