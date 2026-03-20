@@ -33,12 +33,12 @@ body{
 /* LEFT */
 .left{
   position: relative;
-  /* background: url("../img/fondo_upra.JPG") center/cover no-repeat; */
-}
-
-#fondo_upra {
   background: url("../img/fondo_upra.JPG") center/cover no-repeat;
 }
+
+/* #fondo_upra {
+  background: url("../img/fondo_upra.JPG") center/cover no-repeat;
+} */
 
 .left::after{
   content:"";

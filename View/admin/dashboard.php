@@ -27,7 +27,7 @@ include __DIR__ . '/../layout/admin_header.php';
       <span>Añadir Administrador</span>
     </a>
 
-    <a href="#" class="admin-btn-box">
+    <a href="index_admin.php?action=añadirArchivo" class="admin-btn-box">
       <span class="admin-btn-icon">🗂</span>
       <span>Añadir Archivo</span>
     </a>

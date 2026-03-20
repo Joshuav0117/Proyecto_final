@@ -16,7 +16,7 @@
 
   
   <div class="split">
-    <section class="left" aria-label="Imagen" id="fondo_upra">
+    <section class="left" aria-label="Imagen">
       <div class="overlay">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
           <div class="brand">

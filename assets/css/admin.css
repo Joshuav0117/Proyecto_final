@@ -197,3 +197,149 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* CSS para añadirArchivo.php */
+
+.upload-container {
+    width: 500px;
+    margin: 60px auto;
+    background: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.upload-container h1 {
+    margin-bottom: 20px;
+}
+
+.upload-box {
+    display: block;
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    padding: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-box:hover {
+    border-color: #aaa;
+    background-color: #fafafa;
+}
+
+.upload-content .icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.upload-content p {
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+.upload-content small {
+    color: gray;
+}
+
+.select-btn {
+    margin-top: 15px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.select-btn:hover {
+    background-color: #ddd;
+}
+
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cancel-btn {
+    padding: 10px 20px;
+    background-color: #b4b3b3;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.upload-btn {
+    padding: 10px 20px;
+    background-color: #FFEB52;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.upload-btn:hover {
+    background-color: #f5bb0e;
+}
+
+.cancel-btn:hover {
+    background-color: #6b7280;
+}
+
+.file-name {
+  color: black;
+  font-size: 15px;
+}
+
+/* Css de la tabla de los cursos */
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    font-family: sans-serif;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.styled-table thead tr {
+    background-color: #d9d9d9;
+    color: #000000;
+    text-align: left;
+    font-weight: bold;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.save-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #d9d9d9;
+    color: #000000;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.save-btn:hover {
+    background-color: #6b6363;;
+}
+

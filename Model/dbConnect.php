@@ -9,11 +9,11 @@ try {
     $pdo = new PDO(
         "mysql:host=$host;port=$port;dbname=$db;charset=utf8",
         $user,
-        $pass,
+        $pass
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    return true;
-} catch (PDOException $e) {
+
+    } catch (PDOException $e) {
     die("Error de conexión SSL: " . $e->getMessage());
 }
 ?>
