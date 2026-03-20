@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../Model/dbConnect.php'; // $pdo disponible
+require_once __DIR__ . '/../Model/ClassroomModel.php';
 
 class AdminController
 {
@@ -9,11 +10,11 @@ class AdminController
 
     switch ($action) {
       case 'edit_classrooms':
-        $this->editRooms();
+        $this->editClassrooms();
         break;
 
-      case 'toogle_room_status':
-        $this->toggleRoomStatus();
+      case 'toggle_classroom_status':
+        $this->toggleClassroomStatus();
         break;
 
       case 'añadirArchivo':
@@ -35,45 +36,44 @@ class AdminController
     }
   }
 
-  private function editRooms()
-  {
-    $classrooms = [
-      [
-        's_id' => 'AC-232',
-        's_localizacion' => 'Desconocido',
-        's_capacidad' => 0,
-        's_estado' => 1
-      ],
-      [
-        's_id' => 'AC-233B',
-        's_localizacion' => 'Desconocido',
-        's_capacidad' => 0,
-        's_estado' => 0
-      ]
-    ];
+  // Mostrar la vista con todos los salones
+    private function editClassrooms()
+    {
+        $model = new ClassroomModel();
+        $classrooms = $model->getAllClassrooms();
 
-    $this->render('admin/edit_classrooms', [
-      'classrooms' => $classrooms
-    ]);
-  }
-
-  private function toggleRoomStatus()
-  {
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-      header('Location: index_admin.php?action=edit_rooms');
-      exit;
+        $this->render('admin/edit_classrooms', [
+            'classrooms' => $classrooms
+        ]);
     }
 
-    $s_id = trim($_POST['s_id'] ?? '');
-    $current_status = isset($_POST['current_status']) ? (int)$_POST['current_status'] : 0;
+  // Cambiar estado del salón
+    private function toggleClassroomStatus()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index_admin.php?action=edit_classrooms');
+            exit;
+        }
 
-    $new_status = ($current_status === 1) ? 0 : 1;
+        $s_id = trim($_POST['s_id'] ?? '');
+        $current_status = isset($_POST['current_status']) ? (int)$_POST['current_status'] : 0;
 
-     /*Aquí iría los archivos del Modelo cuando tengamos conectada la base de datos*/
+        // Si no llegó el ID, volvemos
+        if ($s_id === '') {
+            header('Location: index_admin.php?action=edit_classrooms');
+            exit;
+        }
 
-    header('Location: index_admin.php?action=edit_rooms');
-    exit;
-  }
+        // Si está activo lo pasamos a inactivo y viceversa
+        $new_status = ($current_status === 1) ? 0 : 1;
+
+        $model = new ClassroomModel();
+        $model->updateClassroomStatus($s_id, $new_status);
+
+        // Volvemos a la lista de salones
+        header('Location: index_admin.php?action=edit_classrooms');
+        exit;
+    }
 
   private function añadirArchivo()
   {

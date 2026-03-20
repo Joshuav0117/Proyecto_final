@@ -17,7 +17,6 @@ include __DIR__ . '/../layout/admin_header.php';
         <div class="classroom-name"><?php echo $h($classroom['s_id']); ?></div>
 
         <div class="classroom-info">
-          <p><strong>Localización:</strong> <?php echo $h($classroom['s_localizacion']); ?></p>
           <p><strong>Capacidad:</strong> <?php echo $h($classroom['s_capacidad']); ?></p>
         </div>
 
