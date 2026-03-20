@@ -33,7 +33,7 @@ body{
 /* LEFT */
 .left{
   position: relative;
-  background: url("../img/fondo_upra.JPG") center/cover no-repeat;
+  background: url("../img/fondo.png") center/cover no-repeat;
 }
 
 /* #fondo_upra {
