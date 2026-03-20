@@ -19,7 +19,7 @@ include __DIR__ . '/../layout/admin_header.php';
     placeholder="Buscar salón (ej: AC-106, AC-233B...)"
     class="classroom-search-input"
   >
-</div><br>
+</div>
 
 <!-- Mensaje si no se encontro nada en la busqueda -->
 <div id="noResultsMessage" class="no-results-message">
@@ -43,7 +43,7 @@ include __DIR__ . '/../layout/admin_header.php';
             </strong>
           </span>
 
-          <form method="post" action="index_admin.php?action=toggle_classroom_status" class="classroom-status-form">
+          <form method="post" action="<?php echo $h($panel_base); ?>?action=toggle_classroom_status" class="classroom-status-form">
             <input type="hidden" name="s_id" value="<?php echo $h($classroom['s_id']); ?>">
             <input type="hidden" name="current_status" value="<?php echo (int)$classroom['s_estado']; ?>">
 
@@ -61,7 +61,7 @@ include __DIR__ . '/../layout/admin_header.php';
   </div>
 
   <div class="classroom-back-wrap">
-    <a href="index_admin.php" class="classroom-back-btn">Volver al panel</a>
+    <a href="<?php echo $h($panel_base); ?>" class="classroom-back-btn">Volver al panel</a>
   </div>
 </div>
 

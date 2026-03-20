@@ -1,0 +1,67 @@
+<?php
+
+require_once __DIR__ . '/../Model/ClassroomModel.php';
+
+class DirectorController
+{
+    public function index()
+    {
+        $action = $_GET['action'] ?? 'dashboard';
+
+        switch ($action) {
+            case 'edit_classrooms':
+                $this->editClassrooms();
+                break;
+
+            case 'toggle_classroom_status':
+                $this->toggleClassroomStatus();
+                break;
+
+            case 'dashboard':
+            default:
+                $this->render('director/director_dashboard');
+                break;
+        }
+    }
+
+    private function editClassrooms()
+    {
+        $model = new ClassroomModel();
+        $classrooms = $model->getAllClassrooms();
+
+        $this->render('admin/edit_classrooms', [
+            'classrooms' => $classrooms,
+            'panel_base' => 'index_director.php'
+        ]);
+    }
+
+    private function toggleClassroomStatus()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index_director.php?action=edit_classrooms');
+            exit;
+        }
+
+        $s_id = trim($_POST['s_id'] ?? '');
+        $current_status = isset($_POST['current_status']) ? (int)$_POST['current_status'] : 0;
+
+        if ($s_id === '') {
+            header('Location: index_director.php?action=edit_classrooms');
+            exit;
+        }
+
+        $new_status = ($current_status === 1) ? 0 : 1;
+
+        $model = new ClassroomModel();
+        $model->updateClassroomStatus($s_id, $new_status);
+
+        header('Location: index_director.php?action=edit_classrooms');
+        exit;
+    }
+
+    private function render($view, $data = [])
+    {
+        extract($data);
+        require __DIR__ . '/../View/' . $view . '.php';
+    }
+}

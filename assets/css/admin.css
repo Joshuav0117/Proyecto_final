@@ -375,3 +375,14 @@
   display: none;
 }
 
+/* Director DASHBOARD */
+
+.director-button-grid{
+  grid-template-columns: 1fr;
+  max-width: 300px;
+  margin: 10px auto 0;
+}
+
+.director-button-grid .admin-btn-box{
+  justify-content: center;
+}

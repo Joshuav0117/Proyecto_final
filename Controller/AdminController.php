@@ -31,7 +31,7 @@ class AdminController
 
       case 'dashboard':
       default:
-        $this->render('admin/dashboard');
+        $this->render('admin/admin_dashboard');
         break;
     }
   }
@@ -43,7 +43,8 @@ class AdminController
         $classrooms = $model->getAllClassrooms();
 
         $this->render('admin/edit_classrooms', [
-            'classrooms' => $classrooms
+            'classrooms' => $classrooms,
+            'panel_base' => 'index_admin.php'
         ]);
     }
 
