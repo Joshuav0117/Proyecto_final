@@ -11,6 +11,21 @@ include __DIR__ . '/../layout/admin_header.php';
   <h1 class="classroom-title">Editar Salones</h1>
   <p class="classroom-subtitle">Activa o inactiva los salones disponibles.</p>
 
+<!-- Barra de busqueda -->
+  <div class="classroom-search-wrap">
+  <input
+    type="text"
+    id="classroomSearch"
+    placeholder="Buscar salón (ej: AC-106, AC-233B...)"
+    class="classroom-search-input"
+  >
+</div><br>
+
+<!-- Mensaje si no se encontro nada en la busqueda -->
+<div id="noResultsMessage" class="no-results-message">
+  No se encontraron salones
+</div>
+
   <div class="classroom-grid">
     <?php foreach ($classrooms as $classroom): ?>
       <div class="classroom-box">
