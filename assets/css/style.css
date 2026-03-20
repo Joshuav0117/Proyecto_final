@@ -543,3 +543,222 @@ textarea:focus{
   font-weight: 500;
   text-align: center;
 }
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-page{
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 20px 60px;
+
+  background: url("../img/recinto.jpg") center/cover no-repeat;
+}
+
+.login-page::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(255,255,255,0.04);
+  z-index: 0;
+}
+
+.login-overlay{
+  display: none;
+}
+
+.login-top,
+.login-card{
+  position: relative;
+  z-index: 2;
+}
+
+.login-top{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 34px 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.login-brand{
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #ffffff;
+  text-align: left;
+}
+
+.login-brand-icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-brand-icon img{
+  width: 85px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.login-brand-text h1{
+  margin: 0;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.login-brand-text p{
+  margin: 6px 0 0 0;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+.login-card{
+  width: 100%;
+  max-width: 730px;
+  background: rgba(255,255,255,0.93);
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+  padding: 34px 30px 40px;
+}
+
+.login-card h2{
+  text-align: center;
+  margin: 0;
+  font-size: 34px;
+  color: #000000;
+}
+
+.login-divider{
+  height: 2px;
+  background: #d7dbe2;
+  margin: 18px 0 28px;
+}
+
+.login-error{
+  background: #fff1f1;
+  border: 1px solid #ffcaca;
+  color: #8f1f1f;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-size: 15px;
+}
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.login-field{
+  position: relative;
+}
+
+.login-field input{
+  width: 100%;
+  height: 76px;
+  border: 2px solid #d7dbe2;
+  border-radius: 10px;
+  padding: 0 18px 0 76px;
+  font-size: 18px;
+  background: rgba(255,255,255,0.96);
+  color: #333;
+}
+
+.login-field input::placeholder{
+  color: #8a8f98;
+}
+
+.login-field input:focus{
+  outline: none;
+  border-color: #2a67c8;
+  box-shadow: 0 0 0 3px rgba(42,103,200,0.10);
+}
+
+.login-icon{
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  opacity: 0.65;
+}
+
+.login-btn{
+  height: 74px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #FFD93D, #FFC300);
+  color: #000000;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.login-btn:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+@media (max-width: 768px){
+  .login-top{
+    padding: 20px 16px 18px;
+    margin-bottom: 26px;
+  }
+
+  .login-brand{
+    gap: 12px;
+  }
+
+  .login-brand-icon img{
+    width: 72px;
+  }
+
+  .login-brand-text h1{
+    font-size: 34px;
+  }
+
+  .login-brand-text p{
+    font-size: 20px;
+  }
+
+  .login-card{
+    padding: 24px 18px 28px;
+  }
+
+  .login-card h2{
+    font-size: 28px;
+  }
+
+  .login-field input{
+    height: 64px;
+    font-size: 16px;
+    padding-left: 64px;
+  }
+
+  .login-icon{
+    font-size: 24px;
+    left: 18px;
+  }
+
+  .login-btn{
+    height: 62px;
+    font-size: 20px;
+  }
+}
