@@ -130,12 +130,17 @@ body{
 
 /* RIGHT */
 .right{
-  position: relative;
+  /* position: relative; */
+  position: sticky;
   background: var(--white);
   padding: 38px 46px;
   display:flex;
   flex-direction:column;
   justify-content: space-between;
+
+  top: 0;
+  height: 100vh; /* ocupa toda la pantalla */
+  overflow-y: auto; /* scroll interno si el contenido es largo */
 }
 
 .topbar{
@@ -490,46 +495,58 @@ textarea:focus{
   margin-bottom:20px;
   width:100%;
 }
-/* CONTENEDOR DE LA TABLA */
-.tabla-disponibilidad{
+/* CONTENEDOR */
+.tabla-disponibilidad {
   margin-top: 20px;
-  padding: 15px;
-  border-radius: 10px;
-  max-width: 100%;
-  /* background-color: white; */
-  overflow-x: auto;
+  padding: 10px;
+  width: 100%; /* ocupa todo el espacio del contenedor */
+  overflow-x: auto; /* evita que se corte si es muy ancha */
 }
 
 /* TABLA */
-.tabla-disponibilidad table{
-  border-collapse: collapse;
-  font-size: 11px;
+.tabla-disponibilidad table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
   width: 100%;
-  background-color: white;
+  font-size: 13px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* ENCABEZADOS */
-.tabla-disponibilidad th{
-  background: #f2f4f7;
-  padding: 4px 6px;
-  border: 1px solid #ddd;
-  font-weight: 600;
+/* HEADER */
+.tabla-Disponibilidad th {
+  background: #1f2937;
+  color: white;
+  padding: 8px;
   text-align: center;
 }
 
 /* CELDAS */
-.tabla-disponibilidad td{
-  padding: 3px 5px;
-  border: 1px solid #ddd;
-  /* border-radius: 50px; */
+.tabla-Disponibilidad td {
+  padding: 6px;
   text-align: center;
+  border-bottom: 1px solid #eee;
 }
 
-/* HORAS OCUPADAS */
-.tabla-disponibilidad td.ocupado{
-  background-color: #2d6cdf;
+/* 🔵 CLASE */
+.tabla-Disponibilidad td.clase {
+  background-color: #3b82f6;
   color: white;
   font-weight: bold;
+}
+
+/* 🟢 REUNIÓN */
+.tabla-Disponibilidad td.reunion {
+  background-color: #22c55e;
+  color: white;
+  font-weight: bold;
+}
+
+/* HOVER SOLO PARA LIBRES */
+.tabla-Disponibilidad tr:hover td:not(.clase):not(.reunion) {
+  background-color: #f3f4f6;
 }
 
 /* CSS para la alerta de reservacion realizada */

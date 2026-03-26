@@ -24,116 +24,126 @@ class BookingController
     $model = new RoomModel();
     $salones = $model->getSalones();
 
-    // ---------- NUEVO: Lógica AJAX ----------
-    if (isset($_GET['ajax']) && $_GET['ajax'] === 'disponibilidad') { 
-    $room = $_GET['room'] ?? '';
 
-    if (!$room) {
-        echo '<p>Selecciona un salón primero.</p>';
+    // ---------- NUEVO: Lógica AJAX ---------- ************
+
+
+    if (isset($_GET['ajax']) && $_GET['ajax'] === 'disponibilidad') { 
+
+    $room = $_GET['room'] ?? '';
+    $fecha = $_GET['date'] ?? '';
+
+    if (!$room || !$fecha) {
+        echo '<p>Selecciona salón y fecha.</p>';
         exit;
     }
+
+    $diaSemana = (int)date('N', strtotime($fecha));
 
     $disponibilidad = $model->getDisponibilidadByRoom($room);
+    $reuniones = $model->getReunionesByRoomAndDate($room, $fecha);
 
-    if (!$disponibilidad) {
-        echo '<p>No hay disponibilidad para este salón.</p>';
-        exit;
-    }
-
-   
-    // LÓGICA PARA RELLENAR INTERVALOS 
-    
-
-    $columnasHoras = [
-        'd_7_00','d_7_30','d_8_00','d_8_30',
-        'd_9_00','d_9_30','d_10_00','d_10_30',
-        'd_11_00','d_11_30','d_12_00','d_12_30',
-        'd_13_00','d_13_30','d_14_00','d_14_30',
-        'd_15_00','d_15_30','d_16_00','d_16_30',
-        'd_17_00','d_17_30','d_18_00','d_18_30',
-        'd_19_00','d_19_30','d_20_00','d_20_30',
-        'd_21_00','d_21_30','d_22_00'
+    // =========================
+    // MAPA DE HORAS
+    // =========================
+    $mapHoras = [
+        'd_7_00'=>'07:00:00','d_7_30'=>'07:30:00','d_8_00'=>'08:00:00','d_8_30'=>'08:30:00',
+        'd_9_00'=>'09:00:00','d_9_30'=>'09:30:00','d_10_00'=>'10:00:00','d_10_30'=>'10:30:00',
+        'd_11_00'=>'11:00:00','d_11_30'=>'11:30:00','d_12_00'=>'12:00:00','d_12_30'=>'12:30:00',
+        'd_13_00'=>'13:00:00','d_13_30'=>'13:30:00','d_14_00'=>'14:00:00','d_14_30'=>'14:30:00',
+        'd_15_00'=>'15:00:00','d_15_30'=>'15:30:00','d_16_00'=>'16:00:00','d_16_30'=>'16:30:00',
+        'd_17_00'=>'17:00:00','d_17_30'=>'17:30:00','d_18_00'=>'18:00:00','d_18_30'=>'18:30:00',
+        'd_19_00'=>'19:00:00','d_19_30'=>'19:30:00','d_20_00'=>'20:00:00','d_20_30'=>'20:30:00',
+        'd_21_00'=>'21:00:00','d_21_30'=>'21:30:00','d_22_00'=>'22:00:00'
     ];
 
-    foreach ($disponibilidad as &$u) {
+    $horasClases = [];
+    $horasReuniones = [];
 
-        $inicio = -1;
+    // =========================
+    // 🔵 CLASES (FORZAR BLOQUES)
+    // =========================
+    foreach ($disponibilidad as $d) {
 
-        foreach ($columnasHoras as $i => $col) {
+        if ($d['d_dia'] != $diaSemana) continue;
 
-            if ($u[$col] == 1 && $inicio == -1) {
-                $inicio = $i;
+        $horasTemp = [];
+
+        foreach ($mapHoras as $col => $hora) {
+            if ($d[$col] == 1) {
+                $horasTemp[] = strtotime($hora);
             }
+        }
 
-            if ($u[$col] == 1 && $inicio != -1 && $i != $inicio) {
-                for ($j = $inicio; $j <= $i; $j++) {
-                    $u[$columnasHoras[$j]] = 1;
-                }
-                $inicio = $i;
+        // 🔥 SI HAY MÁS DE UNA HORA, RELLENAR ENTRE LA MENOR Y LA MAYOR
+        if (!empty($horasTemp)) {
+
+            $inicio = min($horasTemp);
+            $fin    = max($horasTemp) + (30 * 60);
+
+            while ($inicio < $fin) {
+                $horasClases[] = date('H:i:s', $inicio);
+                $inicio += 30 * 60;
             }
         }
     }
-    unset($u);
-   
-    // Generar la tabla 
 
-    ?>
+    // =========================
+    // 🟢 REUNIONES
+    // =========================
+    foreach ($reuniones as $r) {
 
-    <table class="tabla-Disponibilidad">
+        $inicio = strtotime($r['r_hora_inicio']);
+        $fin    = strtotime($r['r_hora_final']);
 
-        <!-- ENCABEZADO -->
-        <tr>
-            <th>Hora</th>
+        while ($inicio < $fin) {
+            $horasReuniones[] = date('H:i:s', $inicio);
+            $inicio += 30 * 60;
+        }
+    }
 
-            <?php foreach ($disponibilidad as $u): ?>
-                <?php
-                switch ($u['d_dia']) {
-                    case 1: $dia = "Lunes"; break;
-                    case 2: $dia = "Martes"; break;
-                    case 3: $dia = "Miércoles"; break;
-                    case 4: $dia = "Jueves"; break;
-                    case 5: $dia = "Viernes"; break;
-                    case 6: $dia = "Sábado"; break;
-                    case 7: $dia = "Domingo"; break;
-                    default: $dia = "Desconocido";
-                }
-                ?>
-                <th><?= $dia ?></th>
-            <?php endforeach; ?>
-        </tr>
+    // =========================
+    // LIMPIEZA
+    // =========================
+    $horasClases = array_flip(array_unique($horasClases));
+    $horasReuniones = array_flip(array_unique($horasReuniones));
 
-        <?php
-        $horas = [
-            '7:00' => 'd_7_00','7:30' => 'd_7_30','8:00' => 'd_8_00','8:30' => 'd_8_30',
-            '9:00' => 'd_9_00','9:30' => 'd_9_30','10:00' => 'd_10_00','10:30' => 'd_10_30',
-            '11:00' => 'd_11_00','11:30' => 'd_11_30','12:00' => 'd_12_00','12:30' => 'd_12_30',
-            '13:00' => 'd_13_00','13:30' => 'd_13_30','14:00' => 'd_14_00','14:30' => 'd_14_30',
-            '15:00' => 'd_15_00','15:30' => 'd_15_30','16:00' => 'd_16_00','16:30' => 'd_16_30',
-            '17:00' => 'd_17_00','17:30' => 'd_17_30','18:00' => 'd_18_00','18:30' => 'd_18_30',
-            '19:00' => 'd_19_00','19:30' => 'd_19_30','20:00' => 'd_20_00','20:30' => 'd_20_30',
-            '21:00' => 'd_21_00','21:30' => 'd_21_30','22:00' => 'd_22_00'
-        ];
-        ?>
+    // =========================
+    // FECHA BONITA
+    // =========================
+    setlocale(LC_TIME, 'es_ES.UTF-8');
+    $fechaFormateada = strftime('%d - %B', strtotime($fecha));
 
-        <!-- FILAS POR HORA -->
-        <?php foreach ($horas as $horaTexto => $columna): ?>
-            <tr>
-                <td><?= $horaTexto ?></td>
+    // =========================
+    // TABLA
+    // =========================
+    echo "<table class='tabla-Disponibilidad'>";
+    echo "<tr><th>Hora</th><th>$fechaFormateada</th></tr>";
 
-                <?php foreach ($disponibilidad as $u): ?>
-                    <td class="<?= $u[$columna] == 1 ? 'ocupado' : '' ?>">
-                        <!-- <?= $u[$columna] ?> -->
-                    </td>
-                <?php endforeach; ?>
+    foreach ($mapHoras as $hora) {
 
-            </tr>
-        <?php endforeach; ?>
+        $clase = '';
+        $estado = 'Libre';
 
-    </table>
+        if (isset($horasClases[$hora])) {
+            $clase = 'clase';
+            $estado = 'Clase';
+        } elseif (isset($horasReuniones[$hora])) {
+            $clase = 'reunion';
+            $estado = 'Reunión';
+        }
 
-    <?php
+        echo "<tr>";
+        // echo "<td>" . substr($hora, 0, 5) . "</td>";
+        echo "<td>" . date('g:i A', strtotime($hora)) . "</td>";
+        echo "<td class='$clase'>$estado</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
+
     exit;
-}
+  }
     // ---------- FIN AJAX ----------
 
     // Session init
@@ -165,7 +175,14 @@ class BookingController
         } elseif (!$is_valid_time($booking['time_start']) || !$is_valid_time($booking['time_end'])) {
           $error = 'Selecciona horas válidas (HH:MM).';
         } else {
-          $startDT = DateTime::createFromFormat('Y-m-d H:i', $booking['date_start'].' '.$booking['time_start']);
+          // $startDT = DateTime::createFromFormat('Y-m-d H:i', $booking['date_start'].' '.$booking['time_start']);
+           // VALIDAR FECHA PASADA
+          $fechaActual = date('Y-m-d');
+
+          if ($booking['date_start'] < $fechaActual) {
+              $error = 'No puedes seleccionar una fecha pasada.';
+          }
+
           // $endDT   = DateTime::createFromFormat('Y-m-d H:i', $booking['date_end'].' '.$booking['time_end']);
 
           // if (!$startDT || !$endDT) {
@@ -226,6 +243,22 @@ class BookingController
       'success' => $success,
       'h' => $h,
     ]);
+  }
+  // REDONDEAR HACIA ARRIBA A 30 MIN
+  private function redondearArriba($hora) {
+      $timestamp = strtotime($hora);
+
+      $minutos = date('i', $timestamp);
+
+      if ($minutos == 0 || $minutos == 30) {
+          return date('H:i:s', $timestamp);
+      }
+
+      if ($minutos < 30) {
+          return date('H:30:00', $timestamp);
+      } else {
+          return date('H:00:00', strtotime('+1 hour', $timestamp));
+      }
   }
 
   private function emptyBooking()

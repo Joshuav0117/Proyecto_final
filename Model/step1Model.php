@@ -27,6 +27,24 @@ class RoomModel {
         $stmt->execute(['room' => $room]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    public function getReunionesByRoomAndDate($room, $fecha) {
+    global $pdo;
+
+    $sql = "SELECT r_hora_inicio, r_hora_final
+            FROM Reunion
+            WHERE s_id = :room
+            AND r_dia = :fecha
+            AND r_estado = 1";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        'room' => $room,
+        'fecha' => $fecha
+    ]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
     public function guardarReserva($data) {
         global $pdo;
@@ -93,7 +111,40 @@ class RoomModel {
             }
         }
 
+        // =========================
+        // 🔴 VALIDAR REUNIONES
+        // =========================
+        $stmt = $pdo->prepare("
+            SELECT r_hora_inicio, r_hora_final
+            FROM Reunion
+            WHERE s_id = :room
+            AND r_dia = :fecha
+            AND r_estado = 1
+        ");
+
+        $stmt->execute([
+            'room' => $room,
+            'fecha' => $date
+        ]);
+
+        $reuniones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $userStart = strtotime($time_start);
+        $userEnd   = strtotime($time_end);
+
+        foreach ($reuniones as $r) {
+            $inicio = strtotime($r['r_hora_inicio']);
+            $fin    = strtotime($r['r_hora_final']);
+
+            // 🔥 OVERLAP
+            if ($userStart < $fin && $userEnd > $inicio) {
+                return false; // ❌ ocupado por reunión
+            }
+        }
+
+        // ✅ SOLO AQUÍ termina
         return true;
+
     }
 
     // Función auxiliar para obtener columnas entre horas

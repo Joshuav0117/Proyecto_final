@@ -77,24 +77,29 @@
 document.addEventListener('DOMContentLoaded', function() {
   const select = document.getElementById('roomSelect');
   const tabla = document.getElementById('tablaDisponibilidad');
+  const dateInput = document.getElementById('date_start');
 
-  select.addEventListener('change', function() {
-    const room = this.value;
+  function cargarTabla() {
+    const room = select.value;
+    const date = dateInput.value;
 
-    if (!room) {
-      tabla.innerHTML = ''; // limpia la tabla si no hay salón seleccionado
+    if (!room || !date) {
+      tabla.innerHTML = '';
       return;
     }
 
-    fetch('index_usuario.php?ajax=disponibilidad&room=' + encodeURIComponent(room))
+    fetch(`index_usuario.php?ajax=disponibilidad&room=${encodeURIComponent(room)}&date=${encodeURIComponent(date)}`)
       .then(res => res.text())
       .then(html => {
-        tabla.innerHTML = html; // inserta la tabla en la sección izquierda
+        tabla.innerHTML = html;
       })
       .catch(err => {
-        console.error('Error al cargar disponibilidad:', err);
-        tabla.innerHTML = '<p>Error al cargar disponibilidad</p>';
+        console.error(err);
+        tabla.innerHTML = '<p>Error al cargar</p>';
       });
-  });
+  }
+
+  select.addEventListener('change', cargarTabla);
+  dateInput.addEventListener('change', cargarTabla);
 });
 </script>
