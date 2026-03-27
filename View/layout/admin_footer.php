@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     });
 
-    // 🔹 Mostrar mensaje si no hay resultados
+    // Mostrar mensaje si no hay resultados
     if (visibleCount === 0) {
       noResults.style.display = "block";
     } else {

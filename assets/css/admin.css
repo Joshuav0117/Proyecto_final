@@ -386,3 +386,92 @@
 .director-button-grid .admin-btn-box{
   justify-content: center;
 }
+
+/* Add Classroom */
+
+.add-classroom-form-wrap{
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.add-classroom-form{
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+.form-group{
+  margin-bottom: 20px;
+}
+
+.form-group label{
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.form-group input,
+.form-group select{
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cccccc;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+  border-color: #2ea6bc;
+  box-shadow: 0 0 0 3px rgba(46,166,188,0.2);
+}
+
+.add-classroom-actions{
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.save-classroom-btn{
+  border: none;
+  background: #000000;
+  color: #ffffff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.save-classroom-btn:hover{
+  background: #2ea6bc;
+}
+
+.error-message{
+  max-width: 620px;
+  margin: 0 auto 20px;
+  background: #fde2e2;
+  color: #b42318;
+  border: 1px solid #f5b5b5;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.success-message{
+  max-width: 620px;
+  margin: 0 auto 20px;
+  background: #dff6e4;
+  color: #1c7c36;
+  border: 1px solid #b9e8c3;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+}

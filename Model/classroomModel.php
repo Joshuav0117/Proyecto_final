@@ -41,4 +41,33 @@ class ClassroomModel
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function insertClassroom($s_id, $s_capacidad, $s_departamento)
+    {
+        global $pdo;
+
+        // Inserta un nuevo salón con valores por defecto
+        $sql = "INSERT INTO Salon (s_id, s_capacidad, s_departamento, s_estado)
+                VALUES (:id, :capacidad, :departamento, :estado)";
+        $stmt = $pdo->prepare($sql);
+
+        return $stmt->execute([
+            'id'            => $s_id,
+            'capacidad'     => $s_capacidad,
+            'departamento'  => $s_departamento,
+            'estado'        => 1
+        ]);
+    }
+
+    public function classroomExists($s_id)
+    {
+        global $pdo;
+
+        // Verifica si ya existe un salón con ese ID
+        $sql = "SELECT COUNT(*) FROM Salon WHERE s_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id' => $s_id]);
+
+        return $stmt->fetchColumn() > 0;
+    }
 }

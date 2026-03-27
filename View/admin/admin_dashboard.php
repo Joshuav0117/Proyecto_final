@@ -17,7 +17,7 @@ include __DIR__ . '/../layout/admin_header.php';
       <span>Editar Salón</span>
     </a>
 
-    <a href="#" class="admin-btn-box">
+    <a href="index_admin.php?action=add_classroom" class="admin-btn-box">
       <span class="admin-btn-icon">＋</span>
       <span>Añadir Salón</span>
     </a>

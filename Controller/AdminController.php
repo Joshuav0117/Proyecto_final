@@ -17,6 +17,14 @@ class AdminController
         $this->toggleClassroomStatus();
         break;
 
+      case 'add_classroom':
+        $this->addClassroom();
+        break;
+
+      case 'save_classroom':
+        $this->saveClassroom();
+        break;
+
       case 'añadirArchivo':
         $this->añadirArchivo();
         break;
@@ -75,6 +83,103 @@ class AdminController
         header('Location: index_admin.php?action=edit_classrooms');
         exit;
     }
+
+    private function addClassroom()
+    {
+      // Lista de departamentos para el dropdown
+      $departments = [
+          'CCOM' => 'Ciencias de Computadoras',
+          'MATE' => 'Matemáticas',
+          'BIOL' => 'Biología',
+          'FISI' => 'Física',
+          'QUIM' => 'Química',
+          'ADEM' => 'Administración de Empresas',
+          'COMU' => 'Comunicaciones',
+          'CISO' => 'Ciencias Sociales',
+          'EDUC' => 'Educación',
+          'ESPA' => 'Español',
+          'INGL' => 'Inglés',
+          'HUMA' => 'Humanidades',
+          'ENFE' => 'Enfermería',
+          'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
+          'ADMIN' => 'Administración'
+      ];
+
+      $this->render('admin/add_classroom', [
+          'departments' => $departments,
+          'error' => '',
+          'success' => ''
+      ]);
+}
+
+    private function saveClassroom()
+  {
+      if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+          header('Location: index_admin.php?action=add_classroom');
+          exit;
+      }
+
+      $s_id = trim($_POST['s_id'] ?? '');
+      $s_departamento = trim($_POST['s_departamento'] ?? '');
+      $s_capacidad = (int)($_POST['s_capacidad'] ?? 0);
+
+      $departments = [
+          'CCOM' => 'Ciencias de Computadoras',
+          'MATE' => 'Matemáticas',
+          'BIOL' => 'Biología',
+          'FISI' => 'Física',
+          'QUIM' => 'Química',
+          'ADEM' => 'Administración de Empresas',
+          'COMU' => 'Comunicaciones',
+          'CISO' => 'Ciencias Sociales',
+          'EDUC' => 'Educación',
+          'ESPA' => 'Español',
+          'INGL' => 'Inglés',
+          'HUMA' => 'Humanidades',
+          'ENFE' => 'Enfermería',
+          'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
+          'ADMINISTRACION' => 'Administración'
+      ];
+
+      // Validaciones sencillas
+      if ($s_id === '' || $s_departamento === '' || $s_capacidad < 0) {
+          $this->render('admin/add_classroom', [
+              'departments' => $departments,
+              'error' => 'Completa todos los campos correctamente.',
+              'success' => ''
+          ]);
+          return;
+      }
+
+      $model = new ClassroomModel();
+
+      // Verifica si el salón ya existe
+      if ($model->classroomExists($s_id)) {
+          $this->render('admin/add_classroom', [
+              'departments' => $departments,
+              'error' => 'Ya existe un salón con ese nombre.',
+              'success' => ''
+          ]);
+          return;
+      }
+
+      $saved = $model->insertClassroom($s_id, $s_capacidad, $s_departamento);
+
+      if ($saved) {
+          $this->render('admin/add_classroom', [
+              'departments' => $departments,
+              'error' => '',
+              'success' => 'Salón añadido correctamente.'
+          ]);
+          return;
+      }
+
+      $this->render('admin/add_classroom', [
+          'departments' => $departments,
+          'error' => 'No se pudo guardar el salón.',
+          'success' => ''
+      ]);
+}
 
   private function añadirArchivo()
   {
