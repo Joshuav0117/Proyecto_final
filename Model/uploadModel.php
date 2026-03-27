@@ -118,8 +118,8 @@ class UploadModel {
         $stmt = $pdo->prepare("SELECT s_id FROM Salon WHERE s_id = ?");
         $stmt->execute([$row['classroom']]);
         if ($stmt->rowCount() === 0) {
-            $stmtInsert = $pdo->prepare("INSERT INTO Salon (s_id, s_localizacion, s_capacidad, s_estado) VALUES (?, ?, ?, ?)");
-            $stmtInsert->execute([$row['classroom'], 'Desconocido', 0, 1]);
+            $stmtInsert = $pdo->prepare("INSERT INTO Salon (s_id, s_capacidad, s_estado) VALUES (?, ?, ?, ?)");
+            $stmtInsert->execute([$row['classroom'], 0, 1]);
         }
     }
 
