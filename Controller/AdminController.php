@@ -1,50 +1,63 @@
 <?php
-require_once __DIR__ . '/../Model/dbConnect.php'; // $pdo disponible
+require_once __DIR__ . '/../Model/dbConnect.php';
 require_once __DIR__ . '/../Model/ClassroomModel.php';
 
 class AdminController
 {
-  public function index()
-  {
-    $action = $_GET['action'] ?? 'dashboard';
+    public function index()
+    {
+        $action = $_GET['action'] ?? 'dashboard';
 
-    switch ($action) {
-      case 'edit_classrooms':
-        $this->editClassrooms();
-        break;
+        switch ($action) {
+            case 'edit_classrooms':
+                $this->editClassrooms();
+                break;
 
-      case 'toggle_classroom_status':
-        $this->toggleClassroomStatus();
-        break;
+            case 'toggle_classroom_status':
+                $this->toggleClassroomStatus();
+                break;
 
-      case 'add_classroom':
-        $this->addClassroom();
-        break;
+            case 'add_classroom':
+                $this->addClassroom();
+                break;
 
-      case 'save_classroom':
-        $this->saveClassroom();
-        break;
+            case 'save_classroom':
+                $this->saveClassroom();
+                break;
 
-      case 'añadirArchivo':
-        $this->añadirArchivo();
-        break;
+            case 'añadirArchivo':
+                $this->añadirArchivo();
+                break;
 
-      case 'uploadCSV':
-        $this->uploadCSV();
-        break;
-      
-      case 'saveCSV':
-        $this->saveCSVToDB();
-        break;
+            case 'uploadCSV':
+                $this->uploadCSV();
+                break;
 
-      case 'dashboard':
-      default:
-        $this->render('admin/admin_dashboard');
-        break;
+            case 'saveCSV':
+                $this->saveCSVToDB();
+                break;
+
+            case 'add_admin':
+                $this->addAdmin();
+                break;
+
+            case 'save_admin':
+                $this->saveAdmin();
+                break;
+
+            case 'dashboard':
+            default:
+                $this->render('admin/admin_dashboard');
+                break;
+        }
     }
-  }
 
-  // Mostrar la vista con todos los salones
+    private function render($view, $data = [])
+    {
+        extract($data);
+        require __DIR__ . '/../View/' . $view . '.php';
+    }
+
     private function editClassrooms()
     {
         $model = new ClassroomModel();
@@ -56,7 +69,6 @@ class AdminController
         ]);
     }
 
-  // Cambiar estado del salón
     private function toggleClassroomStatus()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -67,186 +79,289 @@ class AdminController
         $s_id = trim($_POST['s_id'] ?? '');
         $current_status = isset($_POST['current_status']) ? (int)$_POST['current_status'] : 0;
 
-        // Si no llegó el ID, volvemos
         if ($s_id === '') {
             header('Location: index_admin.php?action=edit_classrooms');
             exit;
         }
 
-        // Si está activo lo pasamos a inactivo y viceversa
         $new_status = ($current_status === 1) ? 0 : 1;
 
         $model = new ClassroomModel();
         $model->updateClassroomStatus($s_id, $new_status);
 
-        // Volvemos a la lista de salones
         header('Location: index_admin.php?action=edit_classrooms');
         exit;
     }
 
     private function addClassroom()
     {
-      // Lista de departamentos para el dropdown
-      $departments = [
-          'CCOM' => 'Ciencias de Computadoras',
-          'MATE' => 'Matemáticas',
-          'BIOL' => 'Biología',
-          'FISI' => 'Física',
-          'QUIM' => 'Química',
-          'ADEM' => 'Administración de Empresas',
-          'COMU' => 'Comunicaciones',
-          'CISO' => 'Ciencias Sociales',
-          'EDUC' => 'Educación',
-          'ESPA' => 'Español',
-          'INGL' => 'Inglés',
-          'HUMA' => 'Humanidades',
-          'ENFE' => 'Enfermería',
-          'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
-          'ADMIN' => 'Administración'
-      ];
+        $departments = [
+            'CCOM' => 'Ciencias de Computadoras',
+            'MATE' => 'Matemáticas',
+            'BIOL' => 'Biología',
+            'FISI' => 'Física',
+            'QUIM' => 'Química',
+            'ADEM' => 'Administración de Empresas',
+            'COMU' => 'Comunicaciones',
+            'CISO' => 'Ciencias Sociales',
+            'EDUC' => 'Educación',
+            'ESPA' => 'Español',
+            'INGL' => 'Inglés',
+            'HUMA' => 'Humanidades',
+            'ENFE' => 'Enfermería',
+            'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
+            'ADMIN' => 'Administración'
+        ];
 
-      $this->render('admin/add_classroom', [
-          'departments' => $departments,
-          'error' => '',
-          'success' => ''
-      ]);
-}
+        $this->render('admin/add_classroom', [
+            'departments' => $departments,
+            'error' => '',
+            'success' => ''
+        ]);
+    }
 
     private function saveClassroom()
-  {
-      if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-          header('Location: index_admin.php?action=add_classroom');
-          exit;
-      }
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index_admin.php?action=add_classroom');
+            exit;
+        }
 
-      $s_id = trim($_POST['s_id'] ?? '');
-      $s_departamento = trim($_POST['s_departamento'] ?? '');
-      $s_capacidad = (int)($_POST['s_capacidad'] ?? 0);
+        $s_id = trim($_POST['s_id'] ?? '');
+        $s_departamento = trim($_POST['s_departamento'] ?? '');
+        $s_capacidad = (int)($_POST['s_capacidad'] ?? 0);
 
-      $departments = [
-          'CCOM' => 'Ciencias de Computadoras',
-          'MATE' => 'Matemáticas',
-          'BIOL' => 'Biología',
-          'FISI' => 'Física',
-          'QUIM' => 'Química',
-          'ADEM' => 'Administración de Empresas',
-          'COMU' => 'Comunicaciones',
-          'CISO' => 'Ciencias Sociales',
-          'EDUC' => 'Educación',
-          'ESPA' => 'Español',
-          'INGL' => 'Inglés',
-          'HUMA' => 'Humanidades',
-          'ENFE' => 'Enfermería',
-          'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
-          'ADMINISTRACION' => 'Administración'
-      ];
+        $departments = [
+            'CCOM' => 'Ciencias de Computadoras',
+            'MATE' => 'Matemáticas',
+            'BIOL' => 'Biología',
+            'FISI' => 'Física',
+            'QUIM' => 'Química',
+            'ADEM' => 'Administración de Empresas',
+            'COMU' => 'Comunicaciones',
+            'CISO' => 'Ciencias Sociales',
+            'EDUC' => 'Educación',
+            'ESPA' => 'Español',
+            'INGL' => 'Inglés',
+            'HUMA' => 'Humanidades',
+            'ENFE' => 'Enfermería',
+            'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
+            'ADMINISTRACION' => 'Administración'
+        ];
 
-      // Validaciones sencillas
-      if ($s_id === '' || $s_departamento === '' || $s_capacidad < 0) {
-          $this->render('admin/add_classroom', [
-              'departments' => $departments,
-              'error' => 'Completa todos los campos correctamente.',
-              'success' => ''
-          ]);
-          return;
-      }
+        if ($s_id === '' || $s_departamento === '' || $s_capacidad < 0) {
+            $this->render('admin/add_classroom', [
+                'departments' => $departments,
+                'error' => 'Completa todos los campos correctamente.',
+                'success' => ''
+            ]);
+            return;
+        }
 
-      $model = new ClassroomModel();
+        $model = new ClassroomModel();
 
-      // Verifica si el salón ya existe
-      if ($model->classroomExists($s_id)) {
-          $this->render('admin/add_classroom', [
-              'departments' => $departments,
-              'error' => 'Ya existe un salón con ese nombre.',
-              'success' => ''
-          ]);
-          return;
-      }
+        if ($model->classroomExists($s_id)) {
+            $this->render('admin/add_classroom', [
+                'departments' => $departments,
+                'error' => 'Ya existe un salón con ese nombre.',
+                'success' => ''
+            ]);
+            return;
+        }
 
-      $saved = $model->insertClassroom($s_id, $s_capacidad, $s_departamento);
+        $saved = $model->insertClassroom($s_id, $s_capacidad, $s_departamento);
 
-      if ($saved) {
-          $this->render('admin/add_classroom', [
+        if ($saved) {
+            $this->render('admin/add_classroom', [
+                'departments' => $departments,
+                'error' => '',
+                'success' => 'Salón añadido correctamente.'
+            ]);
+            return;
+        }
+
+        $this->render('admin/add_classroom', [
+            'departments' => $departments,
+            'error' => 'No se pudo guardar el salón.',
+            'success' => ''
+        ]);
+    }
+
+    private function addAdmin()
+    {
+        $departments = [
+            'CCOM' => 'Ciencias de Computadoras',
+            'MATE' => 'Matemáticas',
+            'BIOL' => 'Biología',
+            'FISI' => 'Física',
+            'QUIM' => 'Química',
+            'ADEM' => 'Administración de Empresas',
+            'COMU' => 'Comunicaciones',
+            'CISO' => 'Ciencias Sociales',
+            'EDUC' => 'Educación',
+            'ESPA' => 'Español',
+            'INGL' => 'Inglés',
+            'HUMA' => 'Humanidades',
+            'ENFE' => 'Enfermería',
+            'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
+            'ADMIN' => 'Administración'
+        ];
+
+        $this->render('admin/add_admin', [
+            'departments' => $departments,
+            'error' => '',
+            'success' => ''
+        ]);
+    }
+
+    private function saveAdmin()
+    {
+        global $pdo;
+
+        $departments = [
+            'CCOM' => 'Ciencias de Computadoras',
+            'MATE' => 'Matemáticas',
+            'BIOL' => 'Biología',
+            'FISI' => 'Física',
+            'QUIM' => 'Química',
+            'ADEM' => 'Administración de Empresas',
+            'COMU' => 'Comunicaciones',
+            'CISO' => 'Ciencias Sociales',
+            'EDUC' => 'Educación',
+            'ESPA' => 'Español',
+            'INGL' => 'Inglés',
+            'HUMA' => 'Humanidades',
+            'ENFE' => 'Enfermería',
+            'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
+            'ADMIN' => 'Administración'
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index_admin.php?action=add_admin');
+            exit;
+        }
+
+        $nombre = trim($_POST['nombre'] ?? '');
+        $inicial = trim($_POST['inicial'] ?? '');
+        $apellido = trim($_POST['apellido'] ?? '');
+        $segundo_apellido = trim($_POST['segundo_apellido'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $rol = trim($_POST['rol'] ?? '');
+        $departamento = trim($_POST['departamento'] ?? '');
+
+        if ($nombre === '' || $apellido === '' || $email === '' || $rol === '' || $departamento === '') {
+            $this->render('admin/add_admin', [
+                'departments' => $departments,
+                'error' => 'Completa todos los campos obligatorios.',
+                'success' => ''
+            ]);
+            return;
+        }
+
+        try {
+            $sqlCheck = "SELECT a_id FROM Administrador WHERE a_email = ?";
+            $stmtCheck = $pdo->prepare($sqlCheck);
+            $stmtCheck->execute([$email]);
+
+            if ($stmtCheck->fetch()) {
+                $this->render('admin/add_admin', [
+                    'departments' => $departments,
+                    'error' => 'Este email ya está registrado.',
+                    'success' => ''
+                ]);
+                return;
+            }
+
+            $sql = "INSERT INTO Administrador 
+                (a_nombre, a_inicial, a_primer_apellido, a_segundo_apellido, a_email, a_rol, a_departamento, a_estado) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->execute([
+                $nombre,
+                $inicial,
+                $apellido,
+                $segundo_apellido,
+                $email,
+                $rol,
+                $departamento
+            ]);
+
+            $this->render('admin/add_admin', [
               'departments' => $departments,
               'error' => '',
-              'success' => 'Salón añadido correctamente.'
+              'success' => 'Administrador añadido correctamente.'
           ]);
-          return;
-      }
-
-      $this->render('admin/add_classroom', [
-          'departments' => $departments,
-          'error' => 'No se pudo guardar el salón.',
-          'success' => ''
-      ]);
-}
-
-  private function añadirArchivo()
-  {
-    $this->render('admin/uploads/añadirArchivo');
-  }
-
-  public function uploadCSV() {
-
-      if (session_status() === PHP_SESSION_NONE) {
-          session_start();
-      }
-
-      if (!isset($_FILES['csv_file'])) {
-          die("No se recibió archivo");
-      }
-
-      require_once __DIR__ . '/../Model/uploadModel.php';
-
-      $model = new UploadModel();
-      $result = $model->processCSV($_FILES['csv_file']);
-
-      if (isset($result['error'])) {
-          die($result['error']);
-      }
-
-      $_SESSION['csv_rows'] = $result['rows'];
-
-      $rows = $result['rows'];
-      $errors = $result['errors'];
-      $fieldMap = $result['fieldMap'];
-
-      require __DIR__ . '/../View/admin/uploads/previewCSV.php';
-  }
-
-  private function saveCSVToDB() {
-    if (session_status() === PHP_SESSION_NONE) session_start();
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['data'])) {
-        $_SESSION['csv_rows'] = $_POST['data'];
+        } catch (PDOException $e) {
+            $this->render('admin/add_admin', [
+                'departments' => $departments,
+                'error' => 'Error al guardar: ' . $e->getMessage(),
+                'success' => ''
+            ]);
+        }
     }
 
-    require_once __DIR__ . '/../Model/uploadModel.php';
-    $model = new UploadModel();
-
-    global $pdo; // Usamos el $pdo de dbConnect.php
-    if (!$pdo) {
-        die("No hay conexión a la base de datos");
+    private function añadirArchivo()
+    {
+        $this->render('admin/uploads/añadirArchivo');
     }
 
-    $result = $model->saveCSVToDB($_SESSION['csv_rows'], $pdo);
+    public function uploadCSV()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-    if (isset($result['error'])) {
-        die("Error al guardar en DB: " . $result['error']);
+        if (!isset($_FILES['csv_file'])) {
+            die("No se recibió archivo");
+        }
+
+        require_once __DIR__ . '/../Model/uploadModel.php';
+
+        $model = new UploadModel();
+        $result = $model->processCSV($_FILES['csv_file']);
+
+        if (isset($result['error'])) {
+            die($result['error']);
+        }
+
+        $_SESSION['csv_rows'] = $result['rows'];
+
+        $rows = $result['rows'];
+        $errors = $result['errors'];
+        $fieldMap = $result['fieldMap'];
+
+        require __DIR__ . '/../View/admin/uploads/previewCSV.php';
     }
 
-    // Limpiamos los datos de sesión
-    unset($_SESSION['csv_rows']);
+    private function saveCSVToDB()
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
 
-    header('Location: index_admin.php?action=dashboard');
-    exit;
-}
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['data'])) {
+            $_SESSION['csv_rows'] = $_POST['data'];
+        }
 
-  private function render($view, $data = [])
-  {
-    extract($data);
-    require __DIR__ . '/../View/' . $view . '.php';
-  }
+        require_once __DIR__ . '/../Model/uploadModel.php';
+        $model = new UploadModel();
+
+        global $pdo;
+        if (!$pdo) {
+            die("No hay conexión a la base de datos");
+        }
+
+        $result = $model->saveCSVToDB($_SESSION['csv_rows'], $pdo);
+
+        if (isset($result['error'])) {
+            die("Error al guardar en DB: " . $result['error']);
+        }
+
+        unset($_SESSION['csv_rows']);
+
+        header('Location: index_admin.php?action=dashboard');
+        exit;
+    }
 }
 
 // if (isset($_GET['action'])) {

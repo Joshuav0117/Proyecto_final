@@ -779,3 +779,74 @@ textarea:focus{
     font-size: 20px;
   }
 }
+
+/* ===== FORM ADMIN ===== */
+
+.form-card{
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.form-row{
+  margin-bottom: 15px;
+}
+
+.form-row input,
+.form-row select{
+  width: 100%;
+  height: 55px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background: #fff;
+}
+
+.form-actions{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.btn-submit{
+  width: 100%;
+  height: 55px;
+  border: none;
+  border-radius: 12px;
+  background: #000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-submit:hover{
+  background: #111;
+}
+
+.btn-back{
+  display: block;
+  width: 100%;
+  height: 55px;
+  border-radius: 12px;
+  background:black; /* 🔥 gris bonito */
+  color:white;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 55px;
+  text-decoration: none;
+  margin-top: 8px; /* 🔥 separación */
+  transition: 0.2s;
+}
+
+.btn-back:hover{
+  background:white;
+  color: black;
+}
