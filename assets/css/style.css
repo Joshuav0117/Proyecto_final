@@ -497,17 +497,23 @@ textarea:focus{
 }
 /* CONTENEDOR */
 .tabla-disponibilidad {
-  margin-top: 20px;
-  padding: 10px;
-  width: 100%; /* ocupa todo el espacio del contenedor */
-  overflow-x: auto; /* evita que se corte si es muy ancha */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: none; 
+  z-index: 10;
+
+  display: none; /* inicialmente oculta */
 }
 
 /* TABLA */
 .tabla-disponibilidad table {
   border-collapse: separate;
   border-spacing: 0;
-  border-radius: 12px;
+  /* border-radius: 12px; */
   overflow: hidden;
   width: 100%;
   font-size: 13px;

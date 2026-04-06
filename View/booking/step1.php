@@ -74,6 +74,8 @@
 </form>
 
 <script>
+document.getElementById("tablaDisponibilidad").style.display = "block";
+
 document.addEventListener('DOMContentLoaded', function() {
   const select = document.getElementById('roomSelect');
   const tabla = document.getElementById('tablaDisponibilidad');

@@ -123,7 +123,7 @@ class BookingController
     foreach ($mapHoras as $hora) {
 
         $clase = '';
-        $estado = 'Libre';
+        $estado = 'Disponible';
 
         if (isset($horasClases[$hora])) {
             $clase = 'clase';

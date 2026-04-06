@@ -35,7 +35,8 @@ class RoomModel {
             FROM Reunion
             WHERE s_id = :room
             AND r_dia = :fecha
-            AND r_estado = 1";
+            AND r_estado = 1
+            AND r_aprobacion = 1";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
