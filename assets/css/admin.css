@@ -475,3 +475,65 @@
   border-radius: 12px;
   font-weight: 600;
 }
+
+/* Reuniones pendientes */
+
+.pending-container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.pending-container .card {
+  background: white;
+  color: black;
+  margin: 15px 0;
+  padding: 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  transition: 0.3s;
+}
+
+.pending-container .card:hover {
+  transform: scale(1.02);
+}
+
+.pending-container .card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pending-container .card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.pending-container .card.active .card-body {
+  max-height: 300px;
+}
+
+.pending-container textarea.nota {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.pending-container .actions {
+  margin-top: 10px;
+  margin-left: 10em;
+  margin-right: 10em;
+}
+
+.pending-container .btn-confirm {
+  background: green;
+  border-radius: 5em;
+  color: white;
+}
+
+.pending-container .btn-deny {
+  background: red;
+  border-radius: 5em;
+  color: white;
+}
