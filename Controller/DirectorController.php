@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../Model/ClassroomModel.php';
+require_once __DIR__ . '/../Model/reunionModel.php';
+
 
 class DirectorController
 {
@@ -17,10 +19,18 @@ class DirectorController
                 $this->toggleClassroomStatus();
                 break;
 
+            case 'actualizarReserva':
+                $this->actualizarReserva();
+                break;
+
             case 'dashboard':
             default:
-                $this->render('director/director_dashboard');
-                break;
+            $model = new ReunionModel();
+            $pendientes = $model->getPendientesDirector();
+
+            $this->render('admin/admin_dashboard', [
+                'pendientes' => $pendientes
+            ]);
         }
     }
 
@@ -63,5 +73,26 @@ class DirectorController
     {
         extract($data);
         require __DIR__ . '/../View/' . $view . '.php';
+    }
+
+    private function actualizarReserva() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+
+        $id = $_POST['id'];
+        $estado = $_POST['estado'];
+        $nota = $_POST['nota'];
+
+        $model = new ReunionModel();
+        $model->actualizarEstado($id, $estado, $nota);
+
+        $reserva = $model->getById($id);
+
+        $mensaje = "Su reservación ha sido ";
+        $mensaje .= ($estado == 1) ? "CONFIRMADA" : "DENEGADA";
+        $mensaje .= "\n\nNota: " . $nota;
+
+        mail($reserva['r_email'], "Estado de reservación", $mensaje);
+
+        echo "ok";
     }
 }
