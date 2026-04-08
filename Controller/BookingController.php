@@ -88,9 +88,7 @@ class BookingController
         }
     }
 
-    // =========================
-    // 🟢 REUNIONES
-    // =========================
+    //  REUNIONES
     foreach ($reuniones as $r) {
 
         $inicio = strtotime($r['r_hora_inicio']);
@@ -102,21 +100,18 @@ class BookingController
         }
     }
 
-    // =========================
     // LIMPIEZA
-    // =========================
+
     $horasClases = array_flip(array_unique($horasClases));
     $horasReuniones = array_flip(array_unique($horasReuniones));
 
-    // =========================
-    // FECHA BONITA
-    // =========================
+    // Areglar Fecha
+
     setlocale(LC_TIME, 'es_ES.UTF-8');
     $fechaFormateada = strftime('%d - %B', strtotime($fecha));
 
-    // =========================
     // TABLA
-    // =========================
+
     echo "<table class='tabla-Disponibilidad'>";
     echo "<tr><th>Hora</th><th>$fechaFormateada</th></tr>";
 

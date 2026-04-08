@@ -51,9 +51,9 @@ class RoomModel {
         global $pdo;
 
         $sql = "INSERT INTO Reunion 
-                (s_id, r_dia, r_hora_inicio, r_hora_final, r_descripcion, r_organizacion, r_email, r_telefono, r_aprobacion, r_estado)
+                (s_id, r_dia, r_hora_inicio, r_hora_final, r_descripcion, r_organizacion, r_nombre, r_email, r_telefono, r_aprobacion, r_estado)
                 VALUES 
-                (:room, :date_start, :time_start, :time_end, :notes, :department, :email, :phone, :aprobacion, :estado)";
+                (:room, :date_start, :time_start, :time_end, :notes, :department, :nombre, :email, :phone, :aprobacion, :estado)";
 
         $stmt = $pdo->prepare($sql);
 
@@ -64,6 +64,7 @@ class RoomModel {
             'time_end'    => $data['time_end'],
             'notes'       => $data['notes'],
             'department'  => $data['department'],
+            'nombre'      => $data['full_name'],
             'email'       => $data['email'],
             'phone'       => $data['phone'],
             'aprobacion'  => 1,
