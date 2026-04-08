@@ -496,6 +496,13 @@ textarea:focus{
   width:100%;
 }
 /* CONTENEDOR */
+/* .tabla-disponibilidad {
+  margin-top: 20px;
+  padding: 10px;
+  width: 100%; /* ocupa todo el espacio del contenedor */
+  /* overflow-x: auto; evita que se corte si es muy ancha */
+/* }  */
+
 .tabla-disponibilidad {
   position: absolute;
   top: 0;

@@ -537,3 +537,15 @@
   border-radius: 5em;
   color: white;
 }
+
+/* CSS para el alert */
+.swal2-popup {
+  border-radius: 20px !important;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.titulo-exito {
+  color: #2bbd0a;
+  font-weight: bold;
+}

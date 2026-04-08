@@ -90,6 +90,7 @@ include __DIR__ . '/../layout/admin_header.php';
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function toggleCard(card) {
   card.classList.toggle("active");
@@ -110,8 +111,17 @@ function accion(e, id, estado) {
   })
   .then(res => res.text())
   .then(() => {
-    alert("Acción realizada");
-    card.remove();
+    Swal.fire({
+      title: '<span class="titulo-exito">¡Éxito!</span>',
+      text: 'Acción realizada correctamente',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      background: '#32383a',
+      color: 'white',
+      confirmButtonColor: '#2bbd0a'
+    }).then(() => {
+      card.remove();
+    });
   });
 }
 </script>
