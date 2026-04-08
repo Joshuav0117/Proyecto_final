@@ -46,7 +46,7 @@ include __DIR__ . '/../layout/admin_header.php';
 
             <div class="card-header">
               <div>
-                <strong>Organización: <?= $h($row['r_organizacion']) ?></strong><br>
+                <strong>Nombre: <?= $h($row['r_nombre']) ?></strong><br>
                 <small><?= $h($row['r_email']) ?></small>
               </div>
 
@@ -57,9 +57,10 @@ include __DIR__ . '/../layout/admin_header.php';
             </div>
 
             <div class="card-body">
-              <p><strong>Descripción:</strong> <?= $h($row['r_descripcion']) ?></p>
               <p><strong>Salón:</strong> <?= $h($row['s_id']) ?></p>
+              <p><strong>Organización: <?= $h($row['r_organizacion']) ?></strong></p>
               <p><strong>Teléfono:</strong> <?= $h($row['r_telefono']) ?></p>
+              <p><strong>Descripción:</strong> <?= $h($row['r_descripcion']) ?></p>
 
               <textarea class="nota" placeholder="Añadir nota..." onclick="event.stopPropagation()"></textarea>
 

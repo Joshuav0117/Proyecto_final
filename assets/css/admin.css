@@ -479,7 +479,7 @@
 /* Reuniones pendientes */
 
 .pending-container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
 }
 
@@ -510,7 +510,7 @@
 }
 
 .pending-container .card.active .card-body {
-  max-height: 300px;
+  max-height: 200em;
 }
 
 .pending-container textarea.nota {
