@@ -27,8 +27,7 @@ class DirectorController
             default:
             $model = new ReunionModel();
             $pendientes = $model->getPendientesDirector();
-
-            $this->render('admin/admin_dashboard', [
+            $this->render('director/director_dashboard', [
                 'pendientes' => $pendientes
             ]);
         }
