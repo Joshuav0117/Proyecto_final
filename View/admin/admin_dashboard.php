@@ -13,22 +13,22 @@ include __DIR__ . '/../layout/admin_header.php';
   <div class="admin-button-grid">
 
     <a href="index_admin.php?action=edit_classrooms" class="admin-btn-box">
-      <span class="admin-btn-icon">✎</span>
+      <span class="admin-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span>
       <span>Editar Salón</span>
     </a>
 
     <a href="index_admin.php?action=add_classroom" class="admin-btn-box">
-      <span class="admin-btn-icon">＋</span>
+      <span class="admin-btn-icon"><i class="fa-solid fa-circle-plus"></i></span>
       <span>Añadir Salón</span>
     </a>
 
     <a href="index_admin.php?action=add_admin" class="admin-btn-box">
-      <span class="admin-btn-icon">👥</span>
+      <span class="admin-btn-icon"><i class="fa-solid fa-user-plus"></i></span>
       <span>Añadir Administrador</span>
     </a>
 
     <a href="index_admin.php?action=añadirArchivo" class="admin-btn-box">
-      <span class="admin-btn-icon">🗂</span>
+      <span class="admin-btn-icon"><i class="fa-solid fa-file-circle-plus"></i></span>
       <span>Añadir Archivo</span>
     </a>
 
@@ -65,8 +65,8 @@ include __DIR__ . '/../layout/admin_header.php';
               <textarea class="nota" placeholder="Añadir nota..." onclick="event.stopPropagation()"></textarea>
 
               <div class="actions">
-                <button class="btn-confirm" onclick="accion(event, <?= $row['r_id'] ?>, 2)">Confirmar</button>
-                <button class="btn-deny" onclick="accion(event, <?= $row['r_id'] ?>, 0)">Denegar</button>
+                <button class="btn-confirm" onclick="accion(event, <?= $row['r_id'] ?>, 2)">Confirmar <i class="fa-regular fa-circle-check"></i></button>
+                <button class="btn-deny" onclick="accion(event, <?= $row['r_id'] ?>, 0)">Denegar <i class="fa-solid fa-x"></i></button>
               </div>
             </div>
 

@@ -11,14 +11,14 @@
           </option>
         <?php endforeach; ?>
       </select>
-      <div class="icon" aria-hidden="true">🏫</div>
+      <div class="icon" aria-hidden="true"><i class="fa-regular fa-building"></i></div>
     </div>
   </div>
 
   <div class="field">
     <label>Fecha (inicio)</label>
     <input id="date_start" type="date" name="date_start" value="<?php echo $h($booking['date_start']); ?>" required />
-    <button type="button" class="icon-btn" data-open="date_start" aria-label="Abrir calendario (inicio)">📅</button>
+    <button type="button" class="icon-btn" data-open="date_start" aria-label="Abrir calendario (inicio)"><i class="fa-solid fa-calendar"></i></button>
   </div>
 
   <!-- <div class="row two">
@@ -39,13 +39,13 @@
     <div class="field">
       <label>Hora (inicio)</label>
       <input id="time_start" type="time" name="time_start" value="<?php echo $h($booking['time_start']); ?>" required />
-      <button type="button" class="icon-btn" data-open="time_start" aria-label="Abrir reloj (inicio)">⏰</button>
+      <button type="button" class="icon-btn" data-open="time_start" aria-label="Abrir reloj (inicio)"><i class="fa-solid fa-clock" style="color: rgb(14, 120, 11);"></i></button>
     </div>
 
     <div class="field">
       <label>Hora (fin)</label>
       <input id="time_end" type="time" name="time_end" value="<?php echo $h($booking['time_end']); ?>" required />
-      <button type="button" class="icon-btn" data-open="time_end" aria-label="Abrir reloj (fin)">⏰</button>
+      <button type="button" class="icon-btn" data-open="time_end" aria-label="Abrir reloj (fin)"><i class="fa-solid fa-clock" style="color: rgb(153, 9, 9);"></i></button>
     </div>
   </div>
 

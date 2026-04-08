@@ -12,7 +12,7 @@ include __DIR__ . '/../layout/director_header.php';
   <div class="admin-button-grid director-button-grid">
 
     <a href="index_director.php?action=edit_classrooms" class="admin-btn-box">
-      <span class="admin-btn-icon">✎</span>
+      <span class="admin-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span>
       <span>Editar Salón</span>
     </a>
 
@@ -50,8 +50,8 @@ include __DIR__ . '/../layout/director_header.php';
               <textarea class="nota" placeholder="Añadir nota..." onclick="event.stopPropagation()"></textarea>
 
               <div class="actions">
-                <button class="btn-confirm" onclick="accion(event, <?= $row['r_id'] ?>, 2)">Confirmar</button>
-                <button class="btn-deny" onclick="accion(event, <?= $row['r_id'] ?>, 0)">Denegar</button>
+                <button class="btn-confirm" onclick="accion(event, <?= $row['r_id'] ?>, 2)">Confirmar <i class="fa-regular fa-circle-check"></i></button>
+                <button class="btn-deny" onclick="accion(event, <?= $row['r_id'] ?>, 0)">Denegar <i class="fa-solid fa-x"></i></button>
               </div>
             </div>
 
