@@ -9,6 +9,15 @@ session_start();
  * Link para correr en el browser: http://localhost/proyecto_final/
  */
 
+// MANEJO DE LOGOUT
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    $_SESSION = [];
+    session_destroy();
+
+    header("Location: index_login.php");
+    exit();
+}
+
 require_once __DIR__ . '/Controller/BookingController.php';
 
 $controller = new BookingController();

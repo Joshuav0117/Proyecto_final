@@ -34,9 +34,12 @@
 
     <section class="right" aria-label="Panel director">
       <div class="topbar">
-        <button class="burger" type="button" aria-label="Menu">
+        <!-- <button class="burger" type="button" aria-label="Menu">
           <span></span>
-        </button>
+        </button> -->
+        <a href="/proyecto_final/index_usuario.php?action=logout" class="burger" aria-label="Logout">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </a>
       </div>
 
       <div class="card">
