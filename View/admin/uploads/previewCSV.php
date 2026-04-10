@@ -44,5 +44,5 @@
     </tbody>
 </table>
 
-<button type="submit" class="save-btn">Guardar en DB</button>
+<button type="submit" class="save-btn">Guardar archivo</button>
 </form>
