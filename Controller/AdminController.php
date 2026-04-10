@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../Model/dbConnect.php';
 require_once __DIR__ . '/../Model/ClassroomModel.php';
 require_once __DIR__ . '/../Model/reunionModel.php';
+require_once __DIR__ . '/../Model/AdminModel.php';
 
 class AdminController
 {
@@ -45,6 +46,14 @@ class AdminController
             case 'save_admin':
                 $this->saveAdmin();
                 break;
+            
+            case 'update_admin_role':
+                $this->updateAdminRole();
+                break;
+
+            case 'toggle_admin_status':
+                $this->toggleAdminStatus();
+                break;
 
             case 'actualizarReserva':
                 $this->actualizarReserva();
@@ -67,6 +76,7 @@ class AdminController
         require __DIR__ . '/../View/' . $view . '.php';
     }
 
+    // Mostrar la vista con todos los salones
     private function editClassrooms()
     {
         $model = new ClassroomModel();
@@ -78,6 +88,7 @@ class AdminController
         ]);
     }
 
+    // Cambiar estado del salón
     private function toggleClassroomStatus()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -104,6 +115,7 @@ class AdminController
 
     private function addClassroom()
     {
+        // Lista de departamentos para el dropdown
         $departments = [
             'CCOM' => 'Ciencias de Computadoras',
             'MATE' => 'Matemáticas',
@@ -216,8 +228,12 @@ class AdminController
             'ADMIN' => 'Administración'
         ];
 
+        $lists = $this->getAdminLists();
+
         $this->render('admin/add_admin', [
             'departments' => $departments,
+            'administradores' => $lists['administradores'],
+            'directores' => $lists['directores'],
             'error' => '',
             'success' => ''
         ]);
@@ -259,8 +275,12 @@ class AdminController
         $departamento = trim($_POST['departamento'] ?? '');
 
         if ($nombre === '' || $apellido === '' || $email === '' || $rol === '' || $departamento === '') {
+            $lists = $this->getAdminLists();
+
             $this->render('admin/add_admin', [
                 'departments' => $departments,
+                'administradores' => $lists['administradores'],
+                'directores' => $lists['directores'],
                 'error' => 'Completa todos los campos obligatorios.',
                 'success' => ''
             ]);
@@ -273,8 +293,12 @@ class AdminController
             $stmtCheck->execute([$email]);
 
             if ($stmtCheck->fetch()) {
+                $lists = $this->getAdminLists();
+
                 $this->render('admin/add_admin', [
                     'departments' => $departments,
+                    'administradores' => $lists['administradores'],
+                    'directores' => $lists['directores'],
                     'error' => 'Este email ya está registrado.',
                     'success' => ''
                 ]);
@@ -297,25 +321,33 @@ class AdminController
                 $departamento
             ]);
 
-            $this->render('admin/add_admin', [
-              'departments' => $departments,
-              'error' => '',
-              'success' => 'Administrador añadido correctamente.'
-          ]);
-        } catch (PDOException $e) {
+            $lists = $this->getAdminLists();
+
             $this->render('admin/add_admin', [
                 'departments' => $departments,
+                'administradores' => $lists['administradores'],
+                'directores' => $lists['directores'],
+                'error' => '',
+                'success' => 'Administrador añadido correctamente.'
+            ]);
+        } catch (PDOException $e) {
+            $lists = $this->getAdminLists();
+
+            $this->render('admin/add_admin', [
+                'departments' => $departments,
+                'administradores' => $lists['administradores'],
+                'directores' => $lists['directores'],
                 'error' => 'Error al guardar: ' . $e->getMessage(),
                 'success' => ''
             ]);
         }
     }
 
-    private function añadirArchivo()
+      private function añadirArchivo()
     {
         $this->render('admin/uploads/añadirArchivo');
     }
-
+    
     public function uploadCSV()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -391,6 +423,63 @@ class AdminController
         mail($reserva['r_email'], "Estado de reservación", $mensaje);
 
         echo "ok";
+    }
+
+    private function updateAdminRole()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index_admin.php?action=add_admin');
+            exit;
+        }
+
+        $a_id = (int)($_POST['a_id'] ?? 0);
+        $new_role = trim($_POST['new_role'] ?? '');
+
+        if ($a_id <= 0 || ($new_role !== 'Administrador' && $new_role !== 'Director')) {
+            header('Location: index_admin.php?action=add_admin');
+            exit;
+        }
+
+        $model = new AdminModel();
+        $model->updateRole($a_id, $new_role);
+
+        header('Location: index_admin.php?action=add_admin');
+        exit;
+    }
+
+    private function toggleAdminStatus()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index_admin.php?action=add_admin');
+            exit;
+        }
+
+        $a_id = (int)($_POST['a_id'] ?? 0);
+        $current_status = isset($_POST['current_status']) ? (int)$_POST['current_status'] : 0;
+
+        if ($a_id <= 0) {
+            header('Location: index_admin.php?action=add_admin');
+            exit;
+        }
+
+        // Si está activo lo pone inactivo y viceversa
+        $new_status = ($current_status === 1) ? 0 : 1;
+
+        $model = new AdminModel();
+        $model->updateStatus($a_id, $new_status);
+
+        header('Location: index_admin.php?action=add_admin');
+        exit;
+    }
+
+    private function getAdminLists()
+    {
+        $adminModel = new AdminModel();
+
+        return [
+            'administradores' => $adminModel->getAllByRole('Administrador'),
+            'directores' => $adminModel->getAllByRole('Director')
+        ];
     }
 }
 
