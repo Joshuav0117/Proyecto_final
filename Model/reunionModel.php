@@ -14,10 +14,16 @@ class ReunionModel {
             return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getPendientesDirector() {
+    public function getPendientesDirector($departamento) {
             $sql = "SELECT * FROM Reunion R JOIN Salon S ON R.s_id = S.s_id 
-                    WHERE R.r_aprobacion = 1 AND S.s_departamento = 'CCOM' ORDER BY r_dia, r_hora_inicio";
-            return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                    WHERE R.r_aprobacion = 1 AND S.s_departamento = :a_departamento ORDER BY r_dia, r_hora_inicio";
+                        
+        // return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(':a_departamento', $departamento);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function actualizarEstado($id, $estado) {

@@ -1,4 +1,5 @@
 <?php include __DIR__ . '/../layout/login_header.php'; ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
 <div class="login-page">
   <div class="login-overlay"></div>
@@ -25,7 +26,7 @@
 
     <form method="POST" action="index_login.php" class="login-form">
       <div class="login-field">
-        <span class="login-icon">✉</span>
+        <span class="login-icon"><i class="fa-regular fa-envelope"></i></span>
         <input
           type="email"
           name="email"
@@ -36,7 +37,7 @@
       </div>
 
       <div class="login-field">
-        <span class="login-icon">🔒</span>
+        <span class="login-icon"><i class="fa-solid fa-lock"></i></span>
         <input
           type="password"
           name="password"

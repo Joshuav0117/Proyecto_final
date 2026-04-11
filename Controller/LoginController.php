@@ -1,9 +1,11 @@
 <?php
-
+require_once __DIR__ . '/../Model/dbConnect.php';
 class LoginController
 {
     public function handle()
     {
+        global $pdo;
+
         $error = '';
         $email = '';
 
@@ -37,38 +39,58 @@ class LoginController
 
             if ($email === '' || $password === '') {
                 $error = 'Debes completar todos los campos.';
-            } else {
+            } 
+            else {
                 // Verificar usuario
                 if (isset($users[$email]) && $users[$email]['password'] === $password) {
 
                     $_SESSION['user'] = [
                         'email' => $email,
-                        'role' => $users[$email]['role']
+                        'role' => $users[$email]['role'],
                     ];
+                    
+                // Este es el pedazo de codigo que quiero verificar
+                    // Buscar el usuario en la base de datos
+                    $stmt = $pdo->prepare("SELECT a_email, a_rol, a_departamento FROM Administrador WHERE a_email = :email");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
 
-                    // Redirección según rol
-                    switch ($users[$email]['role']) {
-                        case 'admin':
-                            header('Location: index_admin.php');
-                            break;
+                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                        case 'director':
-                            header('Location: index_director.php');
-                            break;
+                    if ($result) {
+                        // Guardar TODO en una sola sesión
+                        $_SESSION['user'] = [
+                            'email' => $result['a_email'],
+                            'rol' => $result['a_rol'],
+                            'departamento' => $result['a_departamento']
+                        ];
 
-                        case 'usuario':
-                            header('Location: index_usuario.php');
-                            break;
+                        // Redirección según rol
+                        switch ($_SESSION['user']['rol']) {
+                            case "Administrador":
+                                header('Location: index_admin.php');
+                                break;
+
+                            case "Director":
+                                header('Location: index_director.php');
+                                break;
+
+                            // default:
+                            //     header('Location: index_usuario.php');
+                            //     break;
+                        }
+                        exit;
+
+                    } else {
+                        
+                    header('Location: index_usuario.php');
+                        // $error = 'Usuario no encontrado en la base de datos.';
                     }
-                    exit;
-
-                } else {
-                    $error = 'Correo o contraseña incorrectos.';
+                // Aqui termina el codigo que quiero verificar
                 }
-            }
+            }       
         }
-
-        require_once __DIR__ . '/../View/auth/login.php';
+     require_once __DIR__ . '/../View/auth/login.php';
     }
 }
 ?>

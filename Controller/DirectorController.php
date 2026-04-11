@@ -12,7 +12,8 @@ class DirectorController
 
         switch ($action) {
             case 'edit_classrooms':
-                $this->editClassrooms();
+                $departamento = $_SESSION['user']['departamento'];
+                $this->editClassrooms($departamento);
                 break;
 
             case 'toggle_classroom_status':
@@ -26,17 +27,18 @@ class DirectorController
             case 'dashboard':
             default:
             $model = new ReunionModel();
-            $pendientes = $model->getPendientesDirector();
+            $departamento = $_SESSION['user']['departamento'];
+            $pendientes = $model->getPendientesDirector($departamento);
             $this->render('director/director_dashboard', [
                 'pendientes' => $pendientes
             ]);
         }
     }
 
-    private function editClassrooms()
+    private function editClassrooms($departamento)
     {
         $model = new ClassroomModel();
-        $classrooms = $model->getAllClassrooms();
+        $classrooms = $model->getDeptClassrooms($departamento);
 
         $this->render('admin/edit_classrooms', [
             'classrooms' => $classrooms,

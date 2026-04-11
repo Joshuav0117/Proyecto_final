@@ -15,6 +15,20 @@ class ClassroomModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getDeptClassrooms($departamento)
+    {
+        global $pdo;
+
+        $sql = "SELECT s_id, s_capacidad, s_estado FROM Salon WHERE s_departamento = :a_departamento ORDER BY s_id ASC";
+        $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':a_departamento', $departamento);
+                $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // $stmt = $pdo->query($sql);
+        // return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Cambiar el estado de un salón (0 = inactivo, 1 = activo)
     public function updateClassroomStatus($s_id, $new_status)
     {
