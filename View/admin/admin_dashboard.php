@@ -58,7 +58,7 @@ include __DIR__ . '/../layout/admin_header.php';
 
             <div class="card-body">
               <p><strong>Salón:</strong> <?= $h($row['s_id']) ?></p>
-              <p><strong>Organización: <?= $h($row['r_organizacion']) ?></strong></p>
+              <p><strong>Organización:</strong> <?= $h($row['r_organizacion']) ?></p>
               <p><strong>Teléfono:</strong> <?= $h($row['r_telefono']) ?></p>
               <p><strong>Descripción:</strong> <?= $h($row['r_descripcion']) ?></p>
 

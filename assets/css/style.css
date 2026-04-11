@@ -501,6 +501,57 @@ textarea:focus{
   margin-bottom:20px;
   width:100%;
 }
+/* Reuniones pendientes */
+
+.pending-container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.pending-container .card {
+  background: white;
+  color: black;
+  margin: 15px 0;
+  padding: 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.pending-container .card:hover {
+  transform: scale(1.02);
+}
+
+.pending-container .card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pending-container .card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.pending-container .card.active .card-body {
+  max-height: 200em;
+}
+
+.pending-container .actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pending-container .btn-deny {
+  background: red;
+  border-color: red;
+  border-radius: 2em;
+  color: white;
+  padding: 5px 10px;
+}
+
 /* CONTENEDOR */
 .tabla-disponibilidad {
   margin-top: 20px;

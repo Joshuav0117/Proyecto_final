@@ -30,6 +30,10 @@ class LoginController
             'usuario@upr.edu' => [
                 'password' => 'pass1234',
                 'role' => 'usuario'
+            ],
+            'juan.delpueblo@upr.edu' => [
+                'password' => 'pass1234',
+                'role' => 'usuario'
             ]
         ];
 

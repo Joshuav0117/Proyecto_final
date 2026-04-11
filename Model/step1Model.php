@@ -3,6 +3,59 @@
 require_once __DIR__ . '/dbConnect.php';
 
 class RoomModel {
+    private $conn;
+    
+    public function __construct() {
+        global $pdo;
+        $this->conn = $pdo;
+    }
+
+    public function getPendientesUser($userEmail) {
+        $sql = "SELECT * FROM Reunion WHERE r_estado = 1 AND r_email = :r_email ORDER BY r_dia, r_hora_inicio";
+                    
+        // return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':r_email', $userEmail);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function actualizarReserva() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+
+        $id = $_POST['id'];
+        $estado = $_POST['estado'];
+
+        $model = new RoomModel();
+        $model->actualizarEstado($id, $estado);
+
+        $reserva = $model->getById($id);
+
+        // Esto es para cuando se envia un email 
+            // $mensaje = "Su reservación ha sido ";
+            // $mensaje .= ($estado == 1) ? "CONFIRMADA" : "DENEGADA";
+
+            // mail($reserva['r_email'], "Estado de reservación", $mensaje);
+
+        echo "ok";
+    }
+
+    public function actualizarEstado($id, $estado) {
+
+            $sql = "UPDATE Reunion 
+                    SET r_aprobacion = ?
+                    WHERE r_id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$estado, $id]);
+    }
+
+     public function getById($id) {
+        $sql = "SELECT * FROM Reunion WHERE r_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function getSalones() {
 

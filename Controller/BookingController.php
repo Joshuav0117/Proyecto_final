@@ -6,6 +6,11 @@ class BookingController
 {
   public function handle()
   {
+    // Mostrar las reuniones hechas por el usuario
+    $modelo = new RoomModel();
+    $userEmail = $_SESSION['user']['email'];
+    $pendientes = $modelo->getPendientesUser($userEmail);
+
     $step = isset($_GET['step']) ? (int)$_GET['step'] : 1;
     if ($step < 1 || $step > 3) $step = 1;
 
@@ -150,9 +155,13 @@ class BookingController
     $error = '';
     $success = '';
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'actualizarReserva') {
+        $modelo->actualizarReserva();
+        exit;
+    }
+        
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $action = $_POST['action'] ?? 'next';
-
+      $action = $_POST['action'] ?? 'next';      
       // STEP 1
       if ($step === 1) {
         $booking['room']       = trim($_POST['room'] ?? 'Salon A');
@@ -196,7 +205,8 @@ class BookingController
       // STEP 2
       if ($step === 2) {
         $booking['full_name']  = trim($_POST['full_name'] ?? '');
-        $booking['email']      = trim($_POST['email'] ?? '');
+        // $booking['email']      = trim($_POST['email'] ?? '');
+        $booking['email']      = $_SESSION['user']['email'];
         $booking['phone']      = trim($_POST['phone'] ?? '');
         $booking['department'] = trim($_POST['department'] ?? '');
 
@@ -237,6 +247,7 @@ class BookingController
       'error' => $error,
       'success' => $success,
       'h' => $h,
+      'pendientes' => $pendientes
     ]);
   }
   // REDONDEAR HACIA ARRIBA A 30 MIN

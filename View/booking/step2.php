@@ -11,7 +11,7 @@
   <div class="row two">
     <div class="field">
       <label>Email</label>
-      <input type="email" name="email" value="<?php echo $h($booking['email']); ?>" placeholder="correo@ejemplo.com" maxlength="30" required />
+      <input type="email" name="email" value="<?php echo $h($_SESSION['user']['email']); ?>" placeholder="correo@ejemplo.com" maxlength="30" readonly />
     </div>
     <div class="field">
       <label>Teléfono (opcional)</label>
