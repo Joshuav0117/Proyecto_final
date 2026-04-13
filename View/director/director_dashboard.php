@@ -86,14 +86,19 @@ function accion(e, id, estado) {
   let card = e.target.closest('.card');
   let nota = card.querySelector('.nota').value || "";
 
-  fetch('index_admin.php?action=actualizarReserva', {
+  fetch('index_director.php?action=actualizarReserva', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     body: `id=${id}&estado=${estado}&nota=${encodeURIComponent(nota)}`
   })
-  .then(res => res.text())
+  .then(res => {
+    if (!res.ok) {
+      return res.text().then(text => { throw new Error(text); });
+    }
+    return res.text();
+  })
   .then(() => {
     Swal.fire({
       title: '<span class="titulo-exito">¡Éxito!</span>',
@@ -105,6 +110,13 @@ function accion(e, id, estado) {
       confirmButtonColor: '#2bbd0a'
     }).then(() => {
       card.remove();
+    });
+  })
+  .catch(err => {
+    Swal.fire({
+      title: 'Error',
+      text: err.message || 'No se pudo completar la acción',
+      icon: 'error'
     });
   });
 }

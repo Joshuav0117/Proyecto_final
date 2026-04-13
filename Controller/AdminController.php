@@ -3,6 +3,7 @@ require_once __DIR__ . '/../Model/dbConnect.php';
 require_once __DIR__ . '/../Model/ClassroomModel.php';
 require_once __DIR__ . '/../Model/reunionModel.php';
 require_once __DIR__ . '/../Model/AdminModel.php';
+require_once __DIR__ . '/../Model/MailService.php';
 
 class AdminController
 {
@@ -404,23 +405,43 @@ class AdminController
         exit;
     }
 
-   private function actualizarReserva() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+   private function actualizarReserva()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo "Método no permitido";
+            return;
+        }
 
-        $id = $_POST['id'];
-        $estado = $_POST['estado'];
-        $nota = $_POST['nota'];
+        $id = (int)($_POST['id'] ?? 0);
+        $estado = (int)($_POST['estado'] ?? 0);
+        $nota = trim($_POST['nota'] ?? '');
+
+        if ($id <= 0 || !in_array($estado, [0, 2], true)) {
+            http_response_code(400);
+            echo "Datos inválidos";
+            return;
+        }
 
         $model = new ReunionModel();
-        $model->actualizarEstado($id, $estado, $nota);
+        $model->actualizarEstado($id, $estado);
 
         $reserva = $model->getById($id);
 
-        $mensaje = "Su reservación ha sido ";
-        $mensaje .= ($estado == 1) ? "CONFIRMADA" : "DENEGADA";
-        $mensaje .= "\n\nNota: " . $nota;
+        if (!$reserva) {
+            http_response_code(404);
+            echo "Reservación no encontrada";
+            return;
+        }
 
-        mail($reserva['r_email'], "Estado de reservación", $mensaje);
+        $mailService = new MailService();
+        $mailSent = $mailService->sendReservationStatusEmail($reserva, $estado, $nota);
+
+        if (!$mailSent) {
+            http_response_code(500);
+            echo "La reservación se actualizó, pero no se pudo enviar el correo";
+            return;
+        }
 
         echo "ok";
     }

@@ -103,26 +103,38 @@ function accion(e, id, estado) {
   let nota = card.querySelector('.nota').value || "";
 
   fetch('index_admin.php?action=actualizarReserva', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `id=${id}&estado=${estado}&nota=${encodeURIComponent(nota)}`
-  })
-  .then(res => res.text())
-  .then(() => {
-    Swal.fire({
-      title: '<span class="titulo-exito">¡Éxito!</span>',
-      text: 'Acción realizada correctamente',
-      icon: 'success',
-      confirmButtonText: 'OK',
-      background: '#32383a',
-      color: 'white',
-      confirmButtonColor: '#2bbd0a'
-    }).then(() => {
-      card.remove();
-    });
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: `id=${id}&estado=${estado}&nota=${encodeURIComponent(nota)}`
+})
+.then(res => {
+  if (!res.ok) {
+    return res.text().then(text => { throw new Error(text); });
+  }
+  return res.text();
+})
+.then(() => {
+  Swal.fire({
+    title: '<span class="titulo-exito">¡Éxito!</span>',
+    text: 'Acción realizada correctamente',
+    icon: 'success',
+    confirmButtonText: 'OK',
+    background: '#32383a',
+    color: 'white',
+    confirmButtonColor: '#2bbd0a'
+  }).then(() => {
+    card.remove();
   });
+})
+.catch(err => {
+  Swal.fire({
+    title: 'Error',
+    text: err.message || 'No se pudo completar la acción',
+    icon: 'error'
+  });
+});
 }
 </script>
 
