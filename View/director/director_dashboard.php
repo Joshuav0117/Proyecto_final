@@ -36,7 +36,8 @@ include __DIR__ . '/../layout/director_header.php';
 
               <div class="card-time">
                 <small>Día: <b><?= $h($row['r_dia']) ?></b></small><br>
-                <small>Horario: <b><?= $h($row['r_hora_inicio']) ?> - <?= $h($row['r_hora_final']) ?></b></small>
+                <small>Horario: <b><?= date("g:i A", strtotime($row['r_hora_inicio'])) ?> - <?= date("g:i A", strtotime($row['r_hora_final'])) ?></b></small>
+
               </div>
             </div>
 

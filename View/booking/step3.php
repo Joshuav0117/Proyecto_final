@@ -20,7 +20,7 @@
 <div class="row two">
   <div class="field">
     <label>Horas</label>
-    <input type="text" value="<?php echo $h($booking['time_start']); ?> → <?php echo $h($booking['time_end']); ?>" readonly />
+    <input type="text" value="<?php echo date("g:i A", strtotime($booking['time_start'])) . " → " . date("g:i A", strtotime($booking['time_end'])); ?>" readonly />
   </div>
   <!-- <div class="field">
     <label>Estudiantes</label>
