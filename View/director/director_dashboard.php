@@ -109,7 +109,7 @@ function accion(e, id, estado) {
       color: 'white',
       confirmButtonColor: '#2bbd0a'
     }).then(() => {
-      card.remove();
+      location.reload(); // recarga la página
     });
   })
   .catch(err => {

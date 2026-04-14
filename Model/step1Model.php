@@ -134,7 +134,7 @@ class RoomModel {
         return true;
     }
 
-    // 🔵 VALIDAR DISPONIBILIDAD
+    // VALIDAR DISPONIBILIDAD
     private function validarDisponibilidadBase($room, $diaSemana, $time_start, $time_end) {
 
         $stmt = $this->conn->prepare("
