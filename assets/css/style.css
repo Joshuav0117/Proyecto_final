@@ -803,6 +803,14 @@ textarea:focus{
   filter: brightness(1.1);
 }
 
+.admin-divider{
+  width: 100%;
+  max-width: 1100px;
+  height: 1px;
+  background: #d4d4d4;
+  margin: 40px auto 20px;
+}
+
 @media (max-width: 768px){
   .login-top{
     padding: 20px 16px 18px;

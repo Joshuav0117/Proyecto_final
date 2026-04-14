@@ -48,9 +48,7 @@ class BookingController
     $disponibilidad = $model->getDisponibilidadByRoom($room);
     $reuniones = $model->getReunionesByRoomAndDate($room, $fecha);
 
-    // =========================
     // MAPA DE HORAS
-    // =========================
     $mapHoras = [
         'd_7_00'=>'07:00:00','d_7_30'=>'07:30:00','d_8_00'=>'08:00:00','d_8_30'=>'08:30:00',
         'd_9_00'=>'09:00:00','d_9_30'=>'09:30:00','d_10_00'=>'10:00:00','d_10_30'=>'10:30:00',
@@ -65,9 +63,7 @@ class BookingController
     $horasClases = [];
     $horasReuniones = [];
 
-    // =========================
-    // 🔵 CLASES (FORZAR BLOQUES)
-    // =========================
+    // CLASES (FORZAR BLOQUES)
     foreach ($disponibilidad as $d) {
 
         if ($d['d_dia'] != $diaSemana) continue;
@@ -80,7 +76,7 @@ class BookingController
             }
         }
 
-        // 🔥 SI HAY MÁS DE UNA HORA, RELLENAR ENTRE LA MENOR Y LA MAYOR
+        // SI HAY MÁS DE UNA HORA, RELLENAR ENTRE LA MENOR Y LA MAYOR
         if (!empty($horasTemp)) {
 
             $inicio = min($horasTemp);
@@ -96,17 +92,23 @@ class BookingController
     //  REUNIONES
     foreach ($reuniones as $r) {
 
-        $inicio = strtotime($r['r_hora_inicio']);
-        $fin    = strtotime($r['r_hora_final']);
+      $inicio = strtotime($fecha . ' ' . $r['r_hora_inicio']);
+      $fin    = strtotime($fecha . ' ' . $r['r_hora_final']);
 
-        while ($inicio < $fin) {
-            $horasReuniones[] = date('H:i:s', $inicio);
-            $inicio += 30 * 60;
-        }
-    }
+      // Redondeos
+      $inicio = floor($inicio / (30 * 60)) * (30 * 60);
+      $fin    = ceil($fin / (30 * 60)) * (30 * 60);
+
+      while ($inicio <= $fin - 30 * 60) {
+          $horasReuniones[] = date('H:i:s', $inicio);
+          $inicio += 30 * 60;
+      }
+
+      // 🔥 incluir el final
+      $horasReuniones[] = date('H:i:s', $fin);
+  }
 
     // LIMPIEZA
-
     $horasClases = array_flip(array_unique($horasClases));
     $horasReuniones = array_flip(array_unique($horasReuniones));
 
