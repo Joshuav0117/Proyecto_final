@@ -62,7 +62,12 @@ class LoginController
                     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($result) {
-                        // Guardar TODO en una sola sesión
+                         // Guardar sesión para Admin o Director
+                            $_SESSION['logged_in'] = true;
+                            $_SESSION['user_role'] = $result['a_rol']; // Administrador o Director
+                            $_SESSION['user_email'] = $result['a_email'];
+                            $_SESSION['user_department'] = $result['a_departamento'];
+
                         $_SESSION['user'] = [
                             'email' => $result['a_email'],
                             'rol' => $result['a_rol'],
@@ -70,7 +75,7 @@ class LoginController
                         ];
 
                         // Redirección según rol
-                        switch ($_SESSION['user']['rol']) {
+                        switch ($result['a_rol']) {
                             case "Administrador":
                                 header('Location: index_admin.php');
                                 break;
@@ -79,20 +84,31 @@ class LoginController
                                 header('Location: index_director.php');
                                 break;
 
-                            // default:
-                            //     header('Location: index_usuario.php');
-                            //     break;
+                            default:
+                                header('Location: index_usuario.php');
+                                exit();
                         }
-                        exit;
 
                     } else {
-                        
-                    header('Location: index_usuario.php');
-                        // $error = 'Usuario no encontrado en la base de datos.';
+                        // Usuario normal
+                            $_SESSION['logged_in'] = true;
+                            $_SESSION['user_role'] = 'Usuario';
+                            $_SESSION['user_email'] = $email;
+                            $_SESSION['user_department'] = null;
+
+                            $_SESSION['user'] = [
+                                'email' => $email,
+                                'rol' => 'Usuario',
+                                'departamento' => null
+                            ];
+
+                            header('Location: index_usuario.php');
+                            exit();
                     }
-                // Aqui termina el codigo que quiero verificar
+                } else {
+                    $error = 'Correo o contraseña incorrectos.';
                 }
-            }       
+            }
         }
      require_once __DIR__ . '/../View/auth/login.php';
     }
