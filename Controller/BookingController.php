@@ -157,6 +157,12 @@ class BookingController
     $error = '';
     $success = '';
 
+    // Mensaje de éxito después de guardar la reservación
+    if (isset($_SESSION['success'])) {
+      $success = $_SESSION['success'];
+      unset($_SESSION['success']);
+    }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'actualizarReserva') {
         $modelo->actualizarReserva();
         exit;
