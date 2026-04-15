@@ -63,9 +63,9 @@
           <?php if($step===3) echo "Revisar y Confirmar"; ?>
         </h1>
         <div class="form">
-          <?php if(!empty($error)): ?>
+          <?php /* if(!empty($error)): ?>
             <div class="error"><?php echo $h($error); ?></div>
-          <?php endif; ?>
-          <?php if(!empty($success)): ?>
+          <?php endif; */ ?>
+          <?php /* if(!empty($success)): ?>
             <div class="success"><?php echo $h($success); ?></div>
-          <?php endif; ?>
+          <?php endif; */ ?>

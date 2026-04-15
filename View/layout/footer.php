@@ -63,6 +63,21 @@
 </script>
 <?php endif; ?>
 
+<!-- Mensaje de error notificando que un salón no está disponible -->
+<?php if (!empty($error)): ?>
+<script>
+  Swal.fire({
+    title: '<span class="titulo-error">Error</span>',
+    text: '<?php echo htmlspecialchars($error, ENT_QUOTES, "UTF-8"); ?>',
+    icon: 'error',
+    confirmButtonText: 'OK',
+    background: '#32383a',
+    color: 'white',
+    confirmButtonColor: '#d33'
+  });
+</script>
+<?php endif; ?>
+
 <!-- Cantidad de estudiantes +/- -->
 <!-- <script>
     (function(){
