@@ -57,9 +57,9 @@
   </div>
 </div>
 
-<form method="post" action="index_usuario.php?step=3">
+<form method="post" action="index_usuario.php?step=3" id="bookingConfirmForm">
   <div class="actions">
-    <a class="btn ghost" href="index_usuario.php?step=2">Back</a>
-    <button class="btn primary" type="submit" name="action" value="confirm">Confirm</button>
+    <a class="btn ghost" href="index_usuario.php?step=2" id="backBookingBtn">Back</a>
+    <button class="btn primary" type="submit" name="action" value="confirm" id="confirmBookingBtn">Confirm</button>
   </div>
 </form>

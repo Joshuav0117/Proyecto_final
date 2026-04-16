@@ -78,6 +78,26 @@
 </script>
 <?php endif; ?>
 
+<!-- Evitar doble envío en la reservación -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("bookingConfirmForm");
+  const confirmBtn = document.getElementById("confirmBookingBtn");
+  const backBtn = document.getElementById("backBookingBtn");
+
+  if (!form || !confirmBtn) return;
+
+  form.addEventListener("submit", function () {
+    confirmBtn.textContent = "Procesando...";
+    confirmBtn.classList.add("btn-disabled");
+
+    if (backBtn) {
+      backBtn.classList.add("btn-disabled");
+    }
+  });
+});
+</script>
+
 <!-- Cantidad de estudiantes +/- -->
 <!-- <script>
     (function(){
