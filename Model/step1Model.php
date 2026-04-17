@@ -115,7 +115,7 @@ class RoomModel {
         }
     }
 
-    // 🧠 VALIDACIÓN PRINCIPAL
+    // VALIDACIÓN PRINCIPAL
     public function isDisponible($room, $date, $time_start, $time_end) {
 
         $fecha = new DateTime($date);
@@ -135,7 +135,7 @@ class RoomModel {
     }
 
     // VALIDAR DISPONIBILIDAD
-    private function validarDisponibilidadBase($room, $diaSemana, $time_start, $time_end) {
+   private function validarDisponibilidadBase($room, $diaSemana, $time_start, $time_end) {
 
         $stmt = $this->conn->prepare("
             SELECT * 
@@ -148,19 +148,54 @@ class RoomModel {
             'dia'  => $diaSemana
         ]);
 
-        $disponibilidad = $stmt->fetch(PDO::FETCH_ASSOC);
+        $disp = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$disponibilidad) {
-            return true;
-        }
+        if (!$disp) return true;
 
-        $franjas = $this->getFranjasEntreHoras($time_start, $time_end);
+        // Todas las horas en orden
+        $horas = [
+            '7:00'=>'d_7_00','7:30'=>'d_7_30','8:00'=>'d_8_00','8:30'=>'d_8_30',
+            '9:00'=>'d_9_00','9:30'=>'d_9_30','10:00'=>'d_10_00','10:30'=>'d_10_30',
+            '11:00'=>'d_11_00','11:30'=>'d_11_30','12:00'=>'d_12_00','12:30'=>'d_12_30',
+            '13:00'=>'d_13_00','13:30'=>'d_13_30','14:00'=>'d_14_00','14:30'=>'d_14_30',
+            '15:00'=>'d_15_00','15:30'=>'d_15_30','16:00'=>'d_16_00','16:30'=>'d_16_30',
+            '17:00'=>'d_17_00','17:30'=>'d_17_30','18:00'=>'d_18_00','18:30'=>'d_18_30',
+            '19:00'=>'d_19_00','19:30'=>'d_19_30','20:00'=>'d_20_00','20:30'=>'d_20_30',
+            '21:00'=>'d_21_00','21:30'=>'d_21_30','22:00'=>'d_22_00'
+        ];
 
-        foreach ($franjas as $franja) {
-            if (!isset($disponibilidad[$franja])) continue;
+        // Convertir a timestamps
+        $userStart = strtotime($time_start);
+        $userEnd   = strtotime($time_end);
 
-            if ($disponibilidad[$franja] == 1) {
-                return false;
+        $ocupado = false;
+        $inicioBloque = null;
+
+        foreach ($horas as $hora => $col) {
+
+            if ($disp[$col] == 1 && $inicioBloque === null) {
+                // empieza bloque
+                $inicioBloque = strtotime($hora);
+            }
+
+            // detectar fin del bloque
+            $siguiente = next($horas);
+            $finBloque = null;
+
+            if ($inicioBloque !== null) {
+
+                // si el siguiente es 0 o no existe → termina bloque
+                if (!$siguiente || $disp[$siguiente] == 0) {
+
+                    $finBloque = strtotime($hora);
+
+                    // 🔥 VALIDAR SOLAPAMIENTO
+                    if ($userStart < $finBloque && $userEnd > $inicioBloque) {
+                        return false;
+                    }
+
+                    $inicioBloque = null;
+                }
             }
         }
 
