@@ -96,6 +96,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// Función para abrir el calendario
+  document.querySelectorAll('[data-open]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-open');
+      const input = document.getElementById(id);
+      
+      if (!input) return;
+
+      // Intentar abrir el selector nativo
+      if (typeof input.showPicker === 'function') {
+        input.showPicker();
+      } else {
+        // Fallback para navegadores antiguos
+        input.focus();
+        input.click();
+      }
+    });
+  });
 </script>
 
 <!-- Cantidad de estudiantes +/- -->
@@ -120,19 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
           const min = parseInt(input.min || "0", 10);
           const max = parseInt(input.max || "10", 10);
           input.value = clamp((parseInt(input.value || "0", 10) - 1), min, max);
-        });
-      });
-    })();
-
-    (function(){
-      document.querySelectorAll('[data-open]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          const id = btn.getAttribute('data-open');
-          const input = document.getElementById(id);
-          if (!input) return;
-
-          if (typeof input.showPicker === 'function') input.showPicker();
-          else { input.focus(); input.click(); }
         });
       });
     })();
