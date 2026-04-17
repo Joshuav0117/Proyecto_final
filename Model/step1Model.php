@@ -34,7 +34,7 @@ class RoomModel {
 
     public function actualizarEstado($id, $estado) {
         $sql = "UPDATE Reunion 
-                SET r_aprobacion = ? 
+                SET r_estado = ? 
                 WHERE r_id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$estado, $id]);
