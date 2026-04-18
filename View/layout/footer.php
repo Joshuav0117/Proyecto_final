@@ -14,38 +14,54 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    function toggleCard(card) {
-        card.classList.toggle("active");
-      }
+  function toggleCard(card) {
+    card.classList.toggle("active");
+  }
 
-    function accion(e, id, estado) {
-        e.stopPropagation();
+  function accion(e, id, estado) {
+    e.stopPropagation();
 
-        let card = e.target.closest('.card');
+    let card = e.target.closest('.card');
 
-        fetch('index_usuario.php?action=actualizarReserva', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: `id=${id}&estado=${estado}`
-        })
-        .then(res => res.text())
-        .then(() => {
-          Swal.fire({
-            title: '<span class="titulo-exito">¡Éxito!</span>',
-            text: 'Acción realizada correctamente',
-            icon: 'success',
-            confirmButtonText: 'OK',
-            background: '#32383a',
-            color: 'white',
-            confirmButtonColor: '#2bbd0a'
-          }).then(() => {
-            card.remove();
-          });
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta reservación se eliminará.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      background: '#32383a',
+      color: 'white',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d'
+    }).then((result) => {
+
+      if (!result.isConfirmed) return;
+
+      fetch('index_usuario.php?action=actualizarReserva', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `id=${id}&estado=${estado}`
+      })
+      .then(res => res.text())
+      .then(() => {
+        Swal.fire({
+          title: '<span class="titulo-exito">¡Éxito!</span>',
+          text: 'Reservación eliminada correctamente',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          background: '#32383a',
+          color: 'white',
+          confirmButtonColor: '#2bbd0a'
+        }).then(() => {
+          card.remove();
         });
-      }
-  </script>
+      });
+    });
+  }
+</script>
 
 <!-- Mensaje de éxito cuando un usuario realiza una reservación -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

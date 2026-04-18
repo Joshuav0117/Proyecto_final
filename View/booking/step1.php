@@ -125,7 +125,7 @@
 
                 <?php else: ?>
                   <div class="pending-empty">
-                    No hay reservaciones pendientes
+                    No has realizado reservaciones todavía
                   </div>
                 <?php endif; ?>
 
