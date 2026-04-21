@@ -87,6 +87,11 @@ function accion(e, id, estado) {
   let card = e.target.closest('.card');
   let nota = card.querySelector('.nota').value || "";
 
+  // Mensaje según la acción
+  const mensaje = estado === 2
+    ? 'Reservación confirmada correctamente'
+    : 'Reservación denegada correctamente';
+
   fetch('index_director.php?action=actualizarReserva', {
     method: 'POST',
     headers: {
@@ -103,7 +108,7 @@ function accion(e, id, estado) {
   .then(() => {
     Swal.fire({
       title: '<span class="titulo-exito">¡Éxito!</span>',
-      text: 'Acción realizada correctamente',
+      text: mensaje,
       icon: 'success',
       confirmButtonText: 'OK',
       background: '#32383a',
