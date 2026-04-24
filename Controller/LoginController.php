@@ -50,12 +50,12 @@ class LoginController
 
                     $_SESSION['user'] = [
                         'email' => $email,
-                        'role' => $users[$email]['role'],
+                        //'role' => $users[$email]['role'],
                     ];
                     
                 // Este es el pedazo de codigo que quiero verificar
                     // Buscar el usuario en la base de datos
-                    $stmt = $pdo->prepare("SELECT a_email, a_rol, a_departamento FROM Administrador WHERE a_email = :email");
+                    $stmt = $pdo->prepare("SELECT a_email, a_rol, a_departamento FROM Administrador WHERE a_email = :email and a_estado = 1");
                     $stmt->bindParam(':email', $email);
                     $stmt->execute();
 

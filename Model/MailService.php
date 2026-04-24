@@ -77,7 +77,7 @@ class MailService
             $mail->Body = $html;
             $mail->AltBody = $plain;
 
-            // $mail->send();
+            //$mail->send();
             return true;
         } catch (Exception $e) {
             error_log('Error enviando correo de reservación: ' . $e->getMessage());
