@@ -33,6 +33,7 @@ include __DIR__ . '/../layout/admin_header.php';
 
         <div class="classroom-info">
           <p><strong>Capacidad:</strong> <?php echo $h($classroom['s_capacidad']); ?></p>
+          <p><strong>Departamento:</strong> <?php echo $h($classroom['s_departamento']); ?></p>
         </div>
 
         <div class="classroom-actions">

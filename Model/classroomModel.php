@@ -9,7 +9,7 @@ class ClassroomModel
     {
         global $pdo;
 
-        $sql = "SELECT s_id, s_capacidad, s_estado FROM Salon ORDER BY s_id ASC";
+        $sql = "SELECT s_id, s_capacidad, s_departamento, s_estado FROM Salon WHERE s_id IS NOT NULL AND s_id <> '' ORDER BY s_id ASC";
         $stmt = $pdo->query($sql);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -19,7 +19,7 @@ class ClassroomModel
     {
         global $pdo;
 
-        $sql = "SELECT s_id, s_capacidad, s_estado FROM Salon WHERE s_departamento = :a_departamento ORDER BY s_id ASC";
+        $sql = "SELECT s_id, s_capacidad, s_departamento, s_estado FROM Salon WHERE s_departamento = :a_departamento AND s_id IS NOT NULL AND s_id <> '' ORDER BY s_id ASC";
         $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':a_departamento', $departamento);
                 $stmt->execute();

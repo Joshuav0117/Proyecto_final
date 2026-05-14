@@ -26,15 +26,16 @@ include __DIR__ . '/../layout/admin_header.php';
       </div>
 
       <div class="form-group">
-        <label for="s_departamento">Departamento</label>
-        <select name="s_departamento" id="s_departamento" required>
-          <option value="">Selecciona un departamento</option>
-          <?php foreach ($departments as $code => $name): ?>
-            <option value="<?php echo $h($code); ?>">
-              <?php echo $h($name); ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
+          <label for="s_departamento">Departamento</label>
+          <?php asort($departments); ?>
+          <select name="s_departamento" id="s_departamento" required>
+              <option value="">Selecciona un departamento</option>
+              <?php foreach ($departments as $code => $name): ?>
+                  <option value="<?php echo $h($code); ?>">
+                      <?php echo $h($name); ?>
+                  </option>
+              <?php endforeach; ?>
+          </select>
       </div>
 
       <div class="form-group">

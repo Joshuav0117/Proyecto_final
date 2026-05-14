@@ -118,7 +118,7 @@ class AdminController
     {
         // Lista de departamentos para el dropdown
         $departments = [
-            'CCOM' => 'Ciencias de Computadoras',
+            'CCOM' => 'Ciencias de Cómputos',
             'MATE' => 'Matemáticas',
             'BIOL' => 'Biología',
             'FISI' => 'Física',
@@ -132,7 +132,8 @@ class AdminController
             'HUMA' => 'Humanidades',
             'ENFE' => 'Enfermería',
             'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
-            'ADMIN' => 'Administración'
+            'ADMIN' => 'Administración',
+            'CTI' => 'Centro de Tecnología de Información'
         ];
 
         $this->render('admin/add_classroom', [
@@ -154,7 +155,7 @@ class AdminController
         $s_capacidad = (int)($_POST['s_capacidad'] ?? 0);
 
         $departments = [
-            'CCOM' => 'Ciencias de Computadoras',
+            'CCOM' => 'Ciencias de Cómputos',
             'MATE' => 'Matemáticas',
             'BIOL' => 'Biología',
             'FISI' => 'Física',
@@ -168,7 +169,8 @@ class AdminController
             'HUMA' => 'Humanidades',
             'ENFE' => 'Enfermería',
             'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
-            'ADMINISTRACION' => 'Administración'
+            'ADMIN' => 'Administración',
+            'CTI' => 'Centro de Tecnología de Información'
         ];
 
         if ($s_id === '' || $s_departamento === '' || $s_capacidad < 0) {
@@ -212,7 +214,7 @@ class AdminController
     private function addAdmin()
     {
         $departments = [
-            'CCOM' => 'Ciencias de Computadoras',
+            'CCOM' => 'Ciencias de Cómputos',
             'MATE' => 'Matemáticas',
             'BIOL' => 'Biología',
             'FISI' => 'Física',
@@ -226,7 +228,8 @@ class AdminController
             'HUMA' => 'Humanidades',
             'ENFE' => 'Enfermería',
             'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
-            'ADMIN' => 'Administración'
+            'ADMIN' => 'Administración',
+            'CTI' => 'Centro de Tecnología de Información'
         ];
 
         $lists = $this->getAdminLists();
@@ -245,7 +248,7 @@ class AdminController
         global $pdo;
 
         $departments = [
-            'CCOM' => 'Ciencias de Computadoras',
+            'CCOM' => 'Ciencias de Cómputos',
             'MATE' => 'Matemáticas',
             'BIOL' => 'Biología',
             'FISI' => 'Física',
@@ -259,7 +262,8 @@ class AdminController
             'HUMA' => 'Humanidades',
             'ENFE' => 'Enfermería',
             'GTEC' => 'Gerencia de Tecnologías de Información y Procesos Administrativos',
-            'ADMIN' => 'Administración'
+            'ADMIN' => 'Administración',
+            'CTI' => 'Centro de Tecnología de Información'
         ];
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

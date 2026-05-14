@@ -41,7 +41,83 @@ class LoginModel
         'juan.delpueblo@upr.edu' => [
             'password' => 'pass1234',
             'role' => 'usuario'
-        ]
+        ],
+
+        'idalyz.centeno1@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'admin'
+        ],
+        
+        'yuitza.humaran@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+        
+        'luis.gonzalez38@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'jose.arbelo@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'carlos.valle@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'nancy.jimenez@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'maria.rodriguez52@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'luis.colon19@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'inocencio.rodriguez@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'vanessa.montalvo1@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'karen.morales@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'geissa.torres@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'jose.ortega@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'merylin.martinez@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
+        'rebeca.franqui@upr.edu' => [
+            'password' => 'pass1234',
+            'role' => 'director'
+        ],
+
     ];
 
     // Validar credenciales
