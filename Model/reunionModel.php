@@ -10,13 +10,13 @@ class ReunionModel {
         }
 
         public function getPendientes() {
-                $sql = "SELECT * FROM Reunion WHERE r_aprobacion = 1 ORDER BY r_dia, r_hora_inicio";
+                $sql = "SELECT * FROM Reunion WHERE r_aprobacion = 1 AND r_estado = 1 ORDER BY r_dia, r_hora_inicio";
                 return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         }
 
         public function getPendientesDirector($departamento) {
                 $sql = "SELECT * FROM Reunion R JOIN Salon S ON R.s_id = S.s_id 
-                        WHERE R.r_aprobacion = 1 AND S.s_departamento = :a_departamento ORDER BY r_dia, r_hora_inicio";
+                        WHERE R.r_aprobacion = 1 AND S.s_departamento = :a_departamento AND R.r_estado = 1 ORDER BY r_dia, r_hora_inicio";
                                 
                 // return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
