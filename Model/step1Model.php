@@ -135,72 +135,90 @@ class RoomModel {
     }
 
     // VALIDAR DISPONIBILIDAD
-   private function validarDisponibilidadBase($room, $diaSemana, $time_start, $time_end) {
+  private function validarDisponibilidadBase($room, $diaSemana, $time_start, $time_end) {
 
-        $stmt = $this->conn->prepare("
-            SELECT * 
-            FROM Disponibilidad 
-            WHERE s_id = :room AND d_dia = :dia AND d_estado = 1
-        ");
+    $stmt = $this->conn->prepare("
+        SELECT * 
+        FROM Disponibilidad 
+        WHERE s_id = :room 
+        AND d_dia = :dia 
+        AND d_estado = 1
+    ");
 
-        $stmt->execute([
-            'room' => $room,
-            'dia'  => $diaSemana
-        ]);
+    $stmt->execute([
+        'room' => $room,
+        'dia'  => $diaSemana
+    ]);
 
-        $disp = $stmt->fetch(PDO::FETCH_ASSOC);
+    $disp = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$disp) return true;
-
-        // Todas las horas en orden
-        $horas = [
-            '7:00'=>'d_7_00','7:30'=>'d_7_30','8:00'=>'d_8_00','8:30'=>'d_8_30',
-            '9:00'=>'d_9_00','9:30'=>'d_9_30','10:00'=>'d_10_00','10:30'=>'d_10_30',
-            '11:00'=>'d_11_00','11:30'=>'d_11_30','12:00'=>'d_12_00','12:30'=>'d_12_30',
-            '13:00'=>'d_13_00','13:30'=>'d_13_30','14:00'=>'d_14_00','14:30'=>'d_14_30',
-            '15:00'=>'d_15_00','15:30'=>'d_15_30','16:00'=>'d_16_00','16:30'=>'d_16_30',
-            '17:00'=>'d_17_00','17:30'=>'d_17_30','18:00'=>'d_18_00','18:30'=>'d_18_30',
-            '19:00'=>'d_19_00','19:30'=>'d_19_30','20:00'=>'d_20_00','20:30'=>'d_20_30',
-            '21:00'=>'d_21_00','21:30'=>'d_21_30','22:00'=>'d_22_00'
-        ];
-
-        // Convertir a timestamps
-        $userStart = strtotime($time_start);
-        $userEnd   = strtotime($time_end);
-
-        $ocupado = false;
-        $inicioBloque = null;
-
-        foreach ($horas as $hora => $col) {
-
-            if ($disp[$col] == 1 && $inicioBloque === null) {
-                // empieza bloque
-                $inicioBloque = strtotime($hora);
-            }
-
-            // detectar fin del bloque
-            $siguiente = next($horas);
-            $finBloque = null;
-
-            if ($inicioBloque !== null) {
-
-                // si el siguiente es 0 o no existe → termina bloque
-                if (!$siguiente || $disp[$siguiente] == 0) {
-
-                    $finBloque = strtotime($hora);
-
-                    // 🔥 VALIDAR SOLAPAMIENTO
-                    if ($userStart < $finBloque && $userEnd > $inicioBloque) {
-                        return false;
-                    }
-
-                    $inicioBloque = null;
-                }
-            }
-        }
-
+    // Si no hay disponibilidad registrada,
+    // asumimos que está libre
+    if (!$disp) {
         return true;
     }
+
+    $horas = [
+        '07:00'=>'d_7_00',
+        '07:30'=>'d_7_30',
+        '08:00'=>'d_8_00',
+        '08:30'=>'d_8_30',
+        '09:00'=>'d_9_00',
+        '09:30'=>'d_9_30',
+        '10:00'=>'d_10_00',
+        '10:30'=>'d_10_30',
+        '11:00'=>'d_11_00',
+        '11:30'=>'d_11_30',
+        '12:00'=>'d_12_00',
+        '12:30'=>'d_12_30',
+        '13:00'=>'d_13_00',
+        '13:30'=>'d_13_30',
+        '14:00'=>'d_14_00',
+        '14:30'=>'d_14_30',
+        '15:00'=>'d_15_00',
+        '15:30'=>'d_15_30',
+        '16:00'=>'d_16_00',
+        '16:30'=>'d_16_30',
+        '17:00'=>'d_17_00',
+        '17:30'=>'d_17_30',
+        '18:00'=>'d_18_00',
+        '18:30'=>'d_18_30',
+        '19:00'=>'d_19_00',
+        '19:30'=>'d_19_30',
+        '20:00'=>'d_20_00',
+        '20:30'=>'d_20_30',
+        '21:00'=>'d_21_00',
+        '21:30'=>'d_21_30',
+        '22:00'=>'d_22_00'
+    ];
+
+    $userStart = strtotime($time_start);
+    $userEnd   = strtotime($time_end);
+
+    $horasArray = array_keys($horas);
+
+    for ($i = 0; $i < count($horasArray); $i++) {
+
+        $horaActual = $horasArray[$i];
+        $columna = $horas[$horaActual];
+
+        // Si está ocupada
+        if ($disp[$columna] == 1) {
+
+            $inicioBloque = strtotime($horaActual);
+
+            // Cada bloque dura 30 minutos
+            $finBloque = strtotime($horaActual . ' +30 minutes');
+
+            // VALIDAR SOLAPAMIENTO
+            if ($userStart < $finBloque && $userEnd > $inicioBloque) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
 
     // VALIDAR REUNIONES (FIX)
     private function hayConflictoReuniones($room, $date, $time_start, $time_end) {
